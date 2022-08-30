@@ -32,7 +32,7 @@ apt-get -y install mtd-utils
 apt-get -y install mc
 
 # Tools used to compile applications
-apt-get -y install zip
+apt-get -y install zip unzip
 
 # Miscelaneous tools
 apt-get -y install bc

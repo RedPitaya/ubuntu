@@ -24,19 +24,15 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 # applications used by Bazaar
 
 # libraries used by Bazaar
-#apt-get -y install libluajit-5.1-2 libpcre3 zlib1g lua-cjson unzip
-#apt-get -y install libboost-system1.74.0 libboost-regex1.58.0 libboost-thread1.58.0
-#apt-get -y install libcrypto++6
-#apt-get -y install libcrypto++9v5
-#apt-get -y install libssl1.0.0
 
-# libraries used to compile Bazaar
-#apt-get -y install libluajit-5.1-dev libpcre3-dev zlib1g-dev
-#apt-get -y install libboost-system1.58-dev libboost-regex1.58-dev libboost-thread-dev
-#apt-get -y install libcrypto++-dev
-#apt-get -y install libcurl4-openssl-dev
-#apt-get -y install libssl-dev
-#apt-get -y install libjpeg-dev
+apt-get -y install libcrypto++-dev
+apt-get -y install libboost-dev
+apt-get -y install libluajit
+apt-get -y install libluajit-5.1-dev
+apt-get -y install libpcre3-dev
+apt-get -y install libcurl4-openssl-dev
+apt-get -y install libboost-all-dev
+apt-get -y install lua-cjson
 
 # JSON libraries
 #
