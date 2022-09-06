@@ -40,4 +40,10 @@ apt-get -y install bc
 # shutdown and reboot tool
 apt-get -y install systemd-sysv
 
+# uboot tools (fw_printenv)
+apt install -y libubootenv-tool
+
 EOF_CHROOT
+
+# config for fw_printenv
+install -v -m 664 -o root -D $OVERLAY/etc/fw_env.config  $ROOT_DIR/etc/fw_env.config
