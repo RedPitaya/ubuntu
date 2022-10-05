@@ -11,7 +11,7 @@ echo '# install various packages'
 echo '################################################################################'
 
 # Added by DM; 2017/10/17 to check ROOT_DIR setting
-if [ $ROOT_DIR ]; then 
+if [ $ROOT_DIR ]; then
     echo ROOT_DIR is "$ROOT_DIR"
 else
     echo Error: ROOT_DIR is not set

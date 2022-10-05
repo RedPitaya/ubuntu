@@ -11,6 +11,7 @@ fi
 mkdir                                                                                    $ROOT_DIR/etc/iptables
 install -v -m 664 -o root -D $OVERLAY/etc/iptables/iptables.rules                        $ROOT_DIR/etc/iptables/iptables.rules
 install -v -m 644 -o root -D $OVERLAY/etc/systemd/system/iptables-flush                  $ROOT_DIR/etc/systemd/system/iptables-flush
+install -v -m 664 -o root -D $OVERLAY/etc/systemd/network/25-wireless.link               $ROOT_DIR/etc/systemd/network/25-wireless.link
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/network/wired.network                  $ROOT_DIR/etc/systemd/network/wired.network
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/network/wireless.network.client        $ROOT_DIR/etc/systemd/network/wireless.network.client
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/network/wireless.network.ap            $ROOT_DIR/etc/systemd/network/wireless.network.ap
@@ -52,6 +53,9 @@ apt-get -y install wpasupplicant iw
 
 # WiFi tools (AP)
 apt-get -y install hostapd iptables
+# disable standart hostap
+systemctl disable hostapd.service
+
 ln -sf /opt/redpitaya/hostapd.conf /etc/hostapd/hostapd.conf
 
 # this enables placing the WiFi WPA configuration into the FAT partition

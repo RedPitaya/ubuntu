@@ -118,25 +118,6 @@ apt-get -y install swig
 EOF_CHROOT
 fi
 
-if [[ $SETUP_HWE == 1 ]]
-then
-echo "################################################################################"
-echo "# install HWE kernell"
-echo "################################################################################"
-
-chroot $ROOT_DIR <<- EOF_CHROOT
-export LANGUAGE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-export DEBIAN_FRONTEND=noninteractive
-
-apt-get -y install --install-recommends linux-tools-generic-hwe-22.04 linux-headers-generic-hwe-22.04
-apt-get -y install kmod
-
-EOF_CHROOT
-fi
-
 if [[ $SETUP_KEYBOARD == 1 ]]
 then
 echo "################################################################################"
@@ -253,6 +234,48 @@ debian/wireless_tool.sh
 debian/up_1.08.sh
 
 
+if [[ $SETUP_HWE == 1 ]]
+then
+echo "################################################################################"
+echo "# install HWE kernel modules"
+echo "################################################################################"
+
+chroot $ROOT_DIR <<- EOF_CHROOT
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export DEBIAN_FRONTEND=noninteractive
+export CROSS_COMPILE=arm-linux-gnueabihf-
+export ARCH=arm
+
+apt-get -y install kmod
+
+cd /tmp/
+
+curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2022.3.tar.gz -o /tmp/kernel.tar.gz
+mkdir -p /usr/kernel
+tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
+rm /tmp/kernel.tar.gz
+make -C /usr/kernel mrproper
+make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig
+make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j4
+make -C /usr/kernel ARCH=arm modules_install
+
+
+# Install wifi diriver for rtl8188eu
+
+cd /tmp/
+
+git clone https://github.com/lwfinger/rtl8188eu.git  rtl8188eu
+cd rtl8188eu
+make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx
+make install KERNELRELEASE=5.15.0-xilinx
+rm -rf /tmp/rtl8188eu
+
+EOF_CHROOT
+fi
+
 # OS/debian/tft.sh
 
 ################################################################################
@@ -300,7 +323,6 @@ rm $ROOT_DIR/usr/bin/qemu-arm-static
 # create a tarball (without resolv.conf link, since it causes schroot issues)
 rm $ROOT_DIR/etc/resolv.conf
 tar -cpzf redpitaya_OS_${DATE}.tar.gz --one-file-system -C $ROOT_DIR .
-# recreate resolv.conf link
 ln -sf /run/systemd/resolve/resolv.conf $ROOT_DIR/etc/resolv.conf
 
 # one final sync to be sure

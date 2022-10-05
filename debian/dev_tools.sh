@@ -44,6 +44,11 @@ apt-get -y install libaio-dev libusb-dev libusb-1.0-0-dev libserialport-dev libx
 # Debug tools
 
 apt-get -y install gdb cgdb libcunit1-ncurses-dev
+
+# openssl
+
+apt-get -y install libssl-dev
+
 EOF_CHROOT
 
 
