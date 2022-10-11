@@ -22,7 +22,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -y install dbus udev curl wget gawk
 
 # development tools
-apt-get -y install less vim nano sudo usbutils psmisc lsof 
+apt-get -y install less vim nano sudo usbutils psmisc lsof
 apt-get -y install parted dosfstools
 
 # install file system tools
@@ -42,6 +42,11 @@ apt-get -y install systemd-sysv
 
 # uboot tools (fw_printenv)
 apt install -y libubootenv-tool
+
+# install ntp
+
+apt-get install ntp
+
 
 EOF_CHROOT
 
