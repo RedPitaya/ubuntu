@@ -10,7 +10,7 @@ echo '# install packages for Jyputer'
 echo '###############################################################################'
 
 # Added by DM; 2017/10/17 to check ROOT_DIR setting
-if [ $ROOT_DIR ]; then 
+if [ $ROOT_DIR ]; then
     echo ROOT_DIR is "$ROOT_DIR"
 else
     echo Error: ROOT_DIR is not set
@@ -46,16 +46,19 @@ apt-get -y install python3-matplotlib
 # #pip3 install pycairo
 # pip3 install matplotlib
 
+
+#----------------
+
 # Jupyter and ipywidgets
-pip3 install jupyter
-pip3 install ipywidgets
-jupyter nbextension enable --system --py widgetsnbextension
+#pip3 install jupyter
+#pip3 install ipywidgets
+#jupyter nbextension enable --system --py widgetsnbextension
 
 # Jupyter declarative widgets
-pip3 install jupyter_declarativewidgets
-#jupyter declarativewidgets quick-setup --sys-prefix
-jupyter declarativewidgets install
-jupyter nbextension enable --sys-prefix --py --system declarativewidgets
+#pip3 install jupyter_declarativewidgets
+##jupyter declarativewidgets quick-setup --sys-prefix
+#jupyter declarativewidgets install
+#jupyter nbextension enable --sys-prefix --py --system declarativewidgets
 
 # # Jupyter dashboards
 # pip3 install jupyter_dashboards
@@ -74,7 +77,7 @@ jupyter nbextension enable --sys-prefix --py --system declarativewidgets
 #npm install -g jupyter-dashboards-server
 
 # http://bokeh.pydata.org/ interactive visualization library
-pip3 install bokeh
+# pip3 install bokeh
 
 # additional Python support for GPIO, LED, PWM, SPI, I2C, MMIO, Serial
 # https://pypi.python.org/pypi/python-periphery
@@ -104,34 +107,34 @@ EOF_CHROOT
 ###############################################################################
 
 # copy systemd service
-install -v -m 664 -o root -D  $OVERLAY/etc/systemd/system/jupyter.service \
-                             $ROOT_DIR/etc/systemd/system/jupyter.service
+#install -v -m 664 -o root -D  $OVERLAY/etc/systemd/system/jupyter.service \
+#                             $ROOT_DIR/etc/systemd/system/jupyter.service
 
 # create configuration directory for users root and jupyter
-install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_config.py \
-                             $ROOT_DIR/root/.jupyter/jupyter_notebook_config.py
+#install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_config.py \
+#                             $ROOT_DIR/root/.jupyter/jupyter_notebook_config.py
 # let the owner be root, since the user should not change it easily
-install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_config.py \
-                             $ROOT_DIR/home/jupyter/.jupyter/jupyter_notebook_config.py
+#install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_config.py \
+#                             $ROOT_DIR/home/jupyter/.jupyter/jupyter_notebook_config.py
 
-chroot $ROOT_DIR <<- EOF_CHROOT
-chown -v -R jupyter:jupyter /home/jupyter/.jupyter
-EOF_CHROOT
+#chroot $ROOT_DIR <<- EOF_CHROOT
+#chown -v -R jupyter:jupyter /home/jupyter/.jupyter
+#EOF_CHROOT
 
-chroot $ROOT_DIR <<- EOF_CHROOT
+#chroot $ROOT_DIR <<- EOF_CHROOT
 # systemctl enable jupyter
-EOF_CHROOT
+#EOF_CHROOT
 
 ###############################################################################
 # copy/link notebook examples
 ###############################################################################
 
-mkdir $ROOT_DIR/home/jupyter/RedPitaya
-git clone https://github.com/redpitaya/jupyter.git $ROOT_DIR/home/jupyter/RedPitaya
+#mkdir $ROOT_DIR/home/jupyter/RedPitaya
+#git clone https://github.com/redpitaya/jupyter.git $ROOT_DIR/home/jupyter/RedPitaya
 
-chroot $ROOT_DIR <<- EOF_CHROOT
-pip3 install -e /home/jupyter/RedPitaya
-EOF_CHROOT
+#chroot $ROOT_DIR <<- EOF_CHROOT
+#pip3 install -e /home/jupyter/RedPitaya
+#EOF_CHROOT
 
-mkdir $ROOT_DIR/home/jupyter/WhirlwindTourOfPython
-git clone https://github.com/jakevdp/WhirlwindTourOfPython.git $ROOT_DIR/home/jupyter/WhirlwindTourOfPython
+#mkdir $ROOT_DIR/home/jupyter/WhirlwindTourOfPython
+#git clone https://github.com/jakevdp/WhirlwindTourOfPython.git $ROOT_DIR/home/jupyter/WhirlwindTourOfPython
