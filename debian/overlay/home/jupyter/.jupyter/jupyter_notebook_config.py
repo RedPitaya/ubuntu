@@ -1,15 +1,14 @@
-## Web interface configuration 
-## The IP address the notebook server will listen on.
-c.NotebookApp.ip = '127.0.0.1'
-c.NotebookApp.port = 8888
-c.NotebookApp.base_url = '/jupyter/'
-c.NotebookApp.trust_xheaders = True
-c.NotebookApp.tornado_settings = {'static_url_prefix': '/jupyter/static/'}
+c.ServerApp.allow_password_change = False
+c.ServerApp.allow_root = True
+c.ServerApp.base_url = '/jlab'
+c.ServerApp.disable_check_xsrf = False
+c.ServerApp.ip = '*'
+c.ServerApp.root_dir = '/home/jupyter'
+c.ServerApp.open_browser = False
+c.ServerApp.password_required = False
+c.ServerApp.port = 8888 # port on which you want to host the lab
+c.ServerApp.allow_remote_access = True
+c.ServerApp.token = u''
 
-## Token used for authenticating first-time connections to the server.
-#  
-#  When no password is enabled, the default is to generate a new, random token.
-#  
-#  Setting to an empty string disables authentication altogether, which is NOT
-#  RECOMMENDED.
-c.NotebookApp.token = ''
+c.NotebookApp.nbserver_extensions = { 'jupyterlab' : True }
+c.NotebookApp.tornado_settings = {'static_url_prefix': '/jlab/static/'}
