@@ -47,8 +47,8 @@ pip3 install jupyter_declarativewidgets
 jupyter declarativewidgets install
 jupyter nbextension enable --sys-prefix --py --system declarativewidgets
 
-# http://bokeh.pydata.org/ interactive visualization library
-pip3 install bokeh
+
+pip3 install jupyter_bokeh
 
 # additional Python support for GPIO, LED, PWM, SPI, I2C, MMIO, Serial
 # https://pypi.python.org/pypi/python-periphery
@@ -63,6 +63,8 @@ pip3 install pyvcd
 # https://pypi.python.org/pypi/pyudev
 # https://pypi.python.org/pypi/pyfdt
 pip3 install pyudev pyfdt
+
+
 EOF_CHROOT
 
 ###############################################################################
