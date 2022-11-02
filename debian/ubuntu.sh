@@ -233,6 +233,9 @@ debian/wireless_tool.sh
 # Up to version version 1.08
 debian/up_1.08.sh
 
+# Up to version 2.0 (new ubuntu 22.04)
+
+debian/up_2.0.sh
 
 if [[ $SETUP_HWE == 1 ]]
 then
