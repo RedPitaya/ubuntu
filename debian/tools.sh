@@ -37,6 +37,9 @@ apt-get -y install zip unzip
 # Miscelaneous tools
 apt-get -y install bc
 
+# Disk utility
+apt-get -y install fdisk
+
 # shutdown and reboot tool
 apt-get -y install systemd-sysv
 
