@@ -1,0 +1,4 @@
+[Match]
+Type=wlan
+[Link]
+Name=wlan0
