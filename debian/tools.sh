@@ -50,6 +50,9 @@ apt install -y libubootenv-tool
 
 apt-get install ntp
 
+# install shellinabox
+
+apt-get install openssl shellinabox
 
 EOF_CHROOT
 
