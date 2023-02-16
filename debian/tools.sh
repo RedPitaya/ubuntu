@@ -54,6 +54,10 @@ apt-get install ntp
 
 apt-get install openssl shellinabox
 
+# disable https
+
+sed -i 's/--no-beep/--no-beep --disable-ssl/' /etc/default/shellinabox
+
 EOF_CHROOT
 
 # config for fw_printenv
