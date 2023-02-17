@@ -48,8 +48,7 @@ apt install -y libubootenv-tool
 
 # install ntp
 
-apt-get install ntp
-
+apt-get -y install ntp
 
 EOF_CHROOT
 
