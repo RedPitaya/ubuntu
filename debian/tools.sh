@@ -48,15 +48,7 @@ apt install -y libubootenv-tool
 
 # install ntp
 
-apt-get install ntp
-
-# install shellinabox
-
-apt-get install openssl shellinabox
-
-# disable https
-
-sed -i 's/--no-beep/--no-beep --disable-ssl/' /etc/default/shellinabox
+apt-get -y install ntp
 
 EOF_CHROOT
 

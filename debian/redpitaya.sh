@@ -21,6 +21,15 @@ fi
 
 # SETUP after build baazar
 chroot $ROOT_DIR <<- EOF_CHROOT
+
+# install shellinabox
+
+apt-get -y install openssl shellinabox
+
+# disable https
+
+sed -i 's/--no-beep/--no-beep --disable-ssl/' /etc/default/shellinabox
+
 # applications used by Bazaar
 
 # libraries used by Bazaar
