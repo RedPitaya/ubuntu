@@ -15,26 +15,29 @@ BindsTo=dev-%i.device
 After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service getty-pre.target
 After=rc-local.service
 After=multi-user.target
+After=systemd-update-utmp-runlevel.service
 
 # If additional gettys are spawned during boot then we should make
 # sure that this is synchronized before getty.target, even though
 # getty.target didn't actually pull it in.
-Before=getty.target
-IgnoreOnIsolate=yes
+#Before=getty.target
+#IgnoreOnIsolate=yes
 
 # IgnoreOnIsolate causes issues with sulogin, if someone isolates
 # rescue.target or starts rescue.service from multi-user.target or
 # graphical.target.
-Conflicts=rescue.service
-Before=rescue.service
+#Conflicts=rescue.service
+#Before=rescue.service
 
 [Service]
 # The '-o' option value tells agetty to replace 'login' arguments with an
 # option to preserve environment (-p), followed by '--' for safety, and then
 # the entered username.
-ExecStart=-/sbin/agetty --autologin root --noclear --keep-baud 115200,57600,38400,9600 %I $TERM
-Type=idle
+Type=simple
+ExecStart=-/sbin/agetty --autologin root --noclear %I --keep-baud 115200 linux
+#Type=idle
 Restart=always
+RestartSec=3
 UtmpIdentifier=%I
 TTYPath=/dev/%I
 TTYReset=yes
