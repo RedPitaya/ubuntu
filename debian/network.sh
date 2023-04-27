@@ -99,7 +99,18 @@ systemctl enable avahi-daemon.service
 mkdir -p /etc/systemd/system/avahi-daemon.service.d
 printf "[Unit]\nAfter = systemd-resolved.service\n" > /etc/systemd/system/avahi-daemon.service.d/ad.conf
 
+# enable local domain
+sed -i 's/#MulticastDNS=no/MulticastDNS=yes/' $ROOT_DIR/etc/systemd/resolved.conf
+
+echo '.local.' > $ROOT_DIR/etc/mdns.allow
+echo '.local' >> $ROOT_DIR/etc/mdns.allow
+
+sed -i 's/mdns4_minimal/mdns/' $ROOT_DIR/etc/nsswitch.conf
+
 # enable service for creating SSH keys on first boot
 systemctl enable ssh-reconfigure.service
+
+# The patch disables checking of all raised interfaces
+sed -i 's/ExecStart=\/lib\/systemd\/systemd-networkd-wait-online/ExecStart=\/lib\/systemd\/systemd-networkd-wait-online --any/'  $ROOT_DIR/lib/systemd/system/systemd-networkd-wait-online.service
 
 EOF_CHROOT
