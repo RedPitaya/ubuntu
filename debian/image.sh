@@ -24,7 +24,7 @@ apt install -y qemu-user-static curl
 export DATE=`date +"%H-%M-%S_%d-%b-%Y"`
 
 # default image size if 3GB, which is appropriate for all 4BG SD cards
-SIZE=7500
+SIZE=7400
 
 #IMAGE=$1
 IMAGE=redpitaya_OS_${DATE}.img

@@ -285,19 +285,8 @@ fi
 # handle users
 ###############################################################################
 
-# http://0pointer.de/blog/projects/serial-console.html
-# https://www.thegeekdiary.com/centos-rhel-7-how-to-configure-serial-getty-with-systemd/
 
 install -v -m 664 -o root -D $OVERLAY/etc/securetty $ROOT_DIR/etc/securetty
-install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/serial-getty@ttyPS0.service $ROOT_DIR/etc/systemd/system/serial-getty@ttyPS0.service
-
-
-chroot $ROOT_DIR <<- EOF_CHROOT
-
-# Enable service
-systemctl enable serial-getty@ttyPS0.service
-
-EOF_CHROOT
 
 
 
