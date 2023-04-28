@@ -14,7 +14,7 @@ cd /tmp/
 
 git clone https://github.com/lwfinger/rtl8188eu.git  rtl8188eu
 cd rtl8188eu
-make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx
-make install KERNELRELEASE=5.15.0-xilinx
+make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx -j$(nproc)
+make install KERNELRELEASE=5.15.0-xilinx -j$(nproc)
 
 EOF_CHROOT

@@ -261,9 +261,9 @@ mkdir -p /usr/kernel
 tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 rm /tmp/kernel.tar.gz
 make -C /usr/kernel mrproper
-make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig
-make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j4
-make -C /usr/kernel ARCH=arm modules_install
+make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
+make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
+make -C /usr/kernel ARCH=arm modules_install -j$(nproc)
 
 
 # Install wifi diriver for rtl8188eu
@@ -272,8 +272,8 @@ cd /tmp/
 
 git clone https://github.com/lwfinger/rtl8188eu.git  rtl8188eu
 cd rtl8188eu
-make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx
-make install KERNELRELEASE=5.15.0-xilinx
+make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx -j$(nproc)
+make install KERNELRELEASE=5.15.0-xilinx -j$(nproc)
 rm -rf /tmp/rtl8188eu
 
 EOF_CHROOT
