@@ -63,6 +63,8 @@ install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_startup.servi
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/scpi.service                $ROOT_DIR/etc/systemd/system/scpi.service
 install -v -m 664 -o root -D $OVERLAY/etc/sysconfig/redpitaya                        $ROOT_DIR/etc/sysconfig/redpitaya
 
+cp -r $OVERLAY/etc/systemd/system/serial-getty@ttyPS0.service.d $ROOT_DIR/etc/systemd/system/serial-getty@ttyPS0.service.d
+
 chroot $ROOT_DIR <<- EOF_CHROOT
 systemctl enable redpitaya_nginx
 systemctl enable redpitaya_startup
