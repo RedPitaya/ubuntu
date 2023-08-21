@@ -237,6 +237,10 @@ debian/up_1.08.sh
 
 debian/up_2.0.sh
 
+# Added new kernel modules from external repository
+debian/up_2.01.sh
+
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"

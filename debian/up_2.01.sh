@@ -9,6 +9,6 @@ fi
 chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
-echo 2.0 > /root/.version
+echo 2.01 > /root/.version
 
 EOF_CHROOT
