@@ -37,15 +37,19 @@ apt-get -y install python3-matplotlib
 #----------------
 
 # Jupyterlab and ipywidgets
-pip3 install jupyterlab
-pip3 install ipywidgets
-jupyter nbextension enable --system --py widgetsnbextension
+pip3 install meson meson-python pybind11
+pip3 install contourpy -U --no-build-isolation
+pip3 install notebook jupyterlab
+pip3 install ipywidgets qtconsole
 
 # Jupyter declarative widgets
 pip3 install jupyter_declarativewidgets
+
+## Not work with jupyterlab
 ##jupyter declarativewidgets quick-setup --sys-prefix
-jupyter declarativewidgets install
-jupyter nbextension enable --sys-prefix --py --system declarativewidgets
+## jupyter contrib nbextension enable --system --py widgetsnbextension
+## jupyter declarativewidgets install
+## jupyter contrib nbextension enable --sys-prefix --py --system declarativewidgets
 
 
 pip3 install jupyter_bokeh

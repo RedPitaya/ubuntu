@@ -11,4 +11,6 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 export DEBIAN_FRONTEND=noninteractive
 echo 2.01 > /root/.version
 
+rm /usr/lib/binfmt.d/python3.10.conf
+
 EOF_CHROOT
