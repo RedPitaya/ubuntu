@@ -3,3 +3,6 @@
 /dev/mmcblk0p2  /               ext4    errors=remount-ro      0       1
 /dev/mmcblk0p1  /boot           vfat    defaults,ro            0       0
 /dev/mmcblk0p1  /opt/redpitaya  vfat    defaults,ro            0       2
+none            /var/run        tmpfs   size=2M,noatime        0       0
+none            /var/log        tmpfs   size=5M,noatime        0       0
+proc            /proc           proc    defaults               0       0
