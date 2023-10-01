@@ -19,8 +19,8 @@ tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 rm /tmp/kernel.tar.gz
 make -C /usr/kernel mrproper
 make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig
-make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j4
-make -C /usr/kernel ARCH=arm modules_install
+make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
+make -C /usr/kernel ARCH=arm modules_install -j$(nproc)
 
 
 EOF_CHROOT

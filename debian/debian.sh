@@ -7,7 +7,7 @@
 ################################################################################
 
 # Added by DM; 2017/10/17 to check ROOT_DIR setting
-if [ $ROOT_DIR ]; then 
+if [ $ROOT_DIR ]; then
     echo ROOT_DIR is "$ROOT_DIR"
 else
     echo Error: ROOT_DIR is not set
@@ -152,8 +152,6 @@ install -v -m 664 -o root -D $OVERLAY/etc/fstab  $ROOT_DIR/etc/fstab
 # http://0pointer.de/blog/projects/serial-console.html
 
 install -v -m 664 -o root -D $OVERLAY/etc/securetty $ROOT_DIR/etc/securetty
-install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/serial-getty@ttyPS0.service.d/override.conf \
-                            $ROOT_DIR/etc/systemd/system/serial-getty@ttyPS0.service.d/override.conf
 
 chroot $ROOT_DIR <<- EOF_CHROOT
 echo root:root | chpasswd
