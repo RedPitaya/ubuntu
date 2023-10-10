@@ -7,14 +7,16 @@ else
 fi
 
 echo "################################################################################"
-echo "# Up to 2.01"
+echo "# Up to 2.02"
 echo "################################################################################"
 
 chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
-echo 2.01 > /root/.version
 
-rm /usr/lib/binfmt.d/python3.10.conf
+echo 2.02 > /root/.version
+
+apt-get install libsocketcan-dev
+
 
 EOF_CHROOT

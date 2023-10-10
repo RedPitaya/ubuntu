@@ -240,6 +240,8 @@ debian/up_2.0.sh
 # Added new kernel modules from external repository
 debian/up_2.01.sh
 
+# Added libsocketcan library
+debian/up_2.02.sh
 
 if [[ $SETUP_HWE == 1 ]]
 then
