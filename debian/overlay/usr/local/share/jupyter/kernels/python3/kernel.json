@@ -1,0 +1,18 @@
+{
+    "argv": [
+     "python",
+     "-m",
+     "ipykernel_launcher",
+     "-f",
+     "{connection_file}"
+    ],
+    "display_name": "Python 3 (RP api)",
+    "language": "python",
+    "metadata": {
+     "debugger": true
+    },
+    "env": {
+      "PYTHONPATH": "${PYTHONPATH}:/opt/redpitaya/lib/python"
+    }
+}
+   

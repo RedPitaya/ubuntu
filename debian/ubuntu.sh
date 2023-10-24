@@ -243,6 +243,9 @@ debian/up_2.01.sh
 # Added libsocketcan library
 debian/up_2.02.sh
 
+# Added path to python rp api
+debian/up_2.03.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
