@@ -14,6 +14,16 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
 
+pip3 install --upgrade pip
+pip3 install --upgrade notebook
+pip3 install --upgrade bokeh
+pip3 install --upgrade jupyterlab
+pip3 install --upgrade jupyterlab_server
+pip3 install --upgrade jupyterlab-widgets
+pip3 install --upgrade jupyterlab-pygments
+pip3 install --upgrade jupyter_core
+pip3 install --upgrade jupyter_client
+
 echo 2.03 > /root/.version
 
 EOF_CHROOT
