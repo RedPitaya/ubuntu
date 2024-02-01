@@ -1,8 +1,6 @@
 [Unit]
 Description=Service for startup wifi
 Before=network.target
-Requires=r8188eu.network.service
-After=r8188eu.network.service
 
 [Service]
 Type=forking

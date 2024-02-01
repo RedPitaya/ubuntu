@@ -274,17 +274,6 @@ make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpi
 make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
 make -C /usr/kernel ARCH=arm modules_install -j$(nproc)
 
-
-# Install wifi diriver for rtl8188eu
-
-cd /tmp/
-
-git clone https://github.com/lwfinger/rtl8188eu.git  rtl8188eu
-cd rtl8188eu
-make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" KERNELRELEASE=5.15.0-xilinx -j$(nproc)
-make install KERNELRELEASE=5.15.0-xilinx -j$(nproc)
-rm -rf /tmp/rtl8188eu
-
 EOF_CHROOT
 fi
 
