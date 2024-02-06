@@ -246,6 +246,9 @@ debian/up_2.02.sh
 # Added path to python rp api
 debian/up_2.03.sh
 
+# All wifi drivers loading from modules
+debian/up_2.04.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
@@ -265,7 +268,7 @@ apt-get -y install kmod
 
 cd /tmp/
 
-curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2022.3.tar.gz -o /tmp/kernel.tar.gz
+curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2024.1.tar.gz -o /tmp/kernel.tar.gz
 mkdir -p /usr/kernel
 tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 rm /tmp/kernel.tar.gz
