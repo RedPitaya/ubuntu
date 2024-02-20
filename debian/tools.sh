@@ -37,6 +37,9 @@ apt-get -y install zip unzip
 # Miscelaneous tools
 apt-get -y install bc
 
+# Memory tester tools
+apt-get -y install memtester
+
 # Disk utility
 apt-get -y install fdisk
 
