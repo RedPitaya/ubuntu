@@ -249,6 +249,9 @@ debian/up_2.03.sh
 # All wifi drivers loading from modules
 debian/up_2.04.sh
 
+# Update jupyter code
+debian/up_2.05.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
