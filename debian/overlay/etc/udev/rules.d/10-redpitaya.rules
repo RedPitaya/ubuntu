@@ -34,7 +34,7 @@ SUBSYSTEM=="spidev", GROUP="spi"
 # I2C
 # /dev/i2c-0 device is already part of the group "i2c"
 # EEPROM
-#SUBSYSTEM=="i2c", DRIVER=="at24", RUN+="/bin/chgrp eeprom /sys%p/eeprom", RUN+="/bin/chmod g=u /sys%p/eeprom"
+SUBSYSTEM=="i2c", DRIVER=="at24", RUN+="/bin/chgrp eeprom /sys%p/eeprom", RUN+="/bin/chmod g=u /sys%p/eeprom"
 
 # UART1
 # /dev/ttyPS1 device is already part of the group "dialout"
