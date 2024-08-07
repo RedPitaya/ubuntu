@@ -110,7 +110,7 @@ apt-get -y install python3-pip
 apt-get -y install python-is-python3
 apt-get -y install python3-dev
 
-pip install --upgrade pip setuptools wheel
+pip install --upgrade pip setuptools==70.0.0 wheel
 
 # need for build DTC
 apt-get -y install swig
