@@ -37,7 +37,7 @@ apt-get -y install python3-matplotlib
 #----------------
 
 # Jupyterlab and ipywidgets
-pip3 install meson meson-python pybind11
+pip3 install meson meson-python pybind11 cython
 pip3 install contourpy -U --no-build-isolation
 pip3 install notebook jupyterlab
 pip3 install ipywidgets qtconsole

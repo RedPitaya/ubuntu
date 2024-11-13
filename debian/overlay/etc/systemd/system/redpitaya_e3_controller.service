@@ -1,0 +1,9 @@
+[Unit]
+Description=Service for an application that detects whether an external board is connected to the E3 slot.
+
+[Service]
+Type=forking
+ExecStart=/bin/sh -c '/opt/redpitaya/bin/e3_led_controller -b'
+
+[Install]
+WantedBy=multi-user.target

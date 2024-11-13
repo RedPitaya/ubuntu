@@ -252,6 +252,9 @@ debian/up_2.04.sh
 # Update jupyter code
 debian/up_2.05.sh
 
+# Added service for e3_led_controller
+debian/up_2.06.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
