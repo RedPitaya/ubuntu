@@ -45,8 +45,8 @@ echo "Root dir $ROOT_DIR"
 
 # Create partitions
 parted -s $DEVICE mklabel msdos
-parted -s $DEVICE mkpart primary fat16   4MB 512MB
-parted -s $DEVICE mkpart primary ext4  512MB 100%
+parted -s $DEVICE mkpart primary fat16   4MB 1024MB
+parted -s $DEVICE mkpart primary ext4  1024MB 100%
 
 partprobe $DEVICE
 

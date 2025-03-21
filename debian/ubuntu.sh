@@ -110,7 +110,7 @@ apt-get -y install python3-pip
 apt-get -y install python-is-python3
 apt-get -y install python3-dev
 
-pip install --upgrade pip setuptools==70.0.0 wheel
+pip install --upgrade pip setuptools==70.0.0 wheel packaging
 
 # need for build DTC
 apt-get -y install swig
@@ -255,6 +255,9 @@ debian/up_2.05.sh
 # Added service for e3_led_controller
 debian/up_2.06.sh
 
+# Added libzip-dev package
+debian/up_2.07.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
@@ -288,7 +291,7 @@ fi
 
 # OS/debian/tft.sh
 
-################################################################################
+###############################################################################
 # handle users
 ###############################################################################
 
