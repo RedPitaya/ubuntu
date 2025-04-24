@@ -1,0 +1,11 @@
+[Unit]
+Description=Service for updating the redpitaya ecosystem
+After=network.target
+
+[Service]
+Type=exec
+ExecStart=/bin/sh -c '/tmp/updater -w'
+TimeoutStopSec=3s
+
+[Install]
+WantedBy=multi-user.target

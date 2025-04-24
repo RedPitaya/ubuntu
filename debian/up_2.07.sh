@@ -10,6 +10,8 @@ echo "##########################################################################
 echo "# Up to 2.07"
 echo "################################################################################"
 
+install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_updater.service   $ROOT_DIR/etc/systemd/system/redpitaya_updater.service
+
 chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
