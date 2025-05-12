@@ -50,7 +50,7 @@ apt-get -y install libudev-dev
 EOF_CHROOT
 
 echo '################################################################################'
-echo '# build dtc'
+echo '# install dtc'
 echo '################################################################################'
 
 # NOTE: we have to compile a custom device tree compiler with overlay support
@@ -58,15 +58,7 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 export LANG='C' LC_ALL='C' LANGUAGE='C'
 export DEBIAN_FRONTEND=noninteractive
 
-#curl -L https://github.com/pantoniou/dtc/archive/overlays.tar.gz -o dtc.tar.gz
-#curl -L https://github.com/RedPitaya/dtc/archive/overlays_python3.tar.gz -o dtc.tar.gz
-curl -L https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-1.6.1.tar.gz  -o dtc.tar.gz
-tar zxf dtc.tar.gz
-cd dtc-1.6.1
-make -j$(grep processor /proc/cpuinfo | wc -l)
-make install PREFIX=/usr
-cd ../
-rm -rf dtc-1.6.1 dtc.tar.gz
+apt-get -y install device-tree-compiler
 EOF_CHROOT
 
 
@@ -84,16 +76,16 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -y install libxml2 libxml2-dev bison flex libcdk5-dev
 
 #git clone --branch v0.10 --depth 1 https://github.com/analogdevicesinc/libiio.git
-curl -L https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.23.tar.gz -o libiio.tar.gz
+curl -L https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.26.tar.gz -o libiio.tar.gz
 tar zxvf libiio.tar.gz
-cd libiio-0.23/
+cd libiio-0.26/
 cmake ./ -DPYTHON_BINDINGS=ON
 make all -j$(grep processor /proc/cpuinfo | wc -l)
 make install
-pip3 install bindings/python/
+pip3 install bindings/python/ --break-system-packages
 # cleanup
 cd ../
-rm -rf libiio-0.23 libiio.tar.gz
+rm -rf libiio-0.26 libiio.tar.gz
 EOF_CHROOT
 
 

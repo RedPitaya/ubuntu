@@ -15,8 +15,8 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 export DEBIAN_FRONTEND=noninteractive
 
 # Sigrok
-apt-get -y install libsigrok4 libsigrokdecode4 sigrok-cli
-apt-get -y install libffi7 libffi-dev
+apt-get -y install libsigrok4t64 libsigrokdecode4 sigrok-cli
+apt-get -y install libffi8 libffi-dev
 
 # OWFS 1-wire library
 # NOTE: for now do not install OWFS, and avoid another http/ftp server from running by default
@@ -34,14 +34,14 @@ apt-get -y install python3-matplotlib
 #----------------
 
 # Jupyterlab and ipywidgets
-pip3 install --upgrade pip
-pip3 install meson meson-python pybind11 cython
-pip3 install contourpy -U --no-build-isolation
-pip3 install notebook jupyterlab
-pip3 install ipywidgets qtconsole
+pip3 install --upgrade pip --break-system-packages
+pip3 install meson meson-python pybind11 cython --break-system-packages
+pip3 install contourpy -U --no-build-isolation --break-system-packages
+pip3 install notebook jupyterlab --break-system-packages
+pip3 install ipywidgets qtconsole --break-system-packages
 
 # Jupyter declarative widgets
-pip3 install jupyter_declarativewidgets
+pip3 install jupyter_declarativewidgets --break-system-packages
 
 ## Not work with jupyterlab
 ##jupyter declarativewidgets quick-setup --sys-prefix
@@ -50,21 +50,21 @@ pip3 install jupyter_declarativewidgets
 ## jupyter contrib nbextension enable --sys-prefix --py --system declarativewidgets
 
 
-pip3 install jupyter_bokeh
+pip3 install jupyter_bokeh --break-system-packages
 
 # additional Python support for GPIO, LED, PWM, SPI, I2C, MMIO, Serial
 # https://pypi.python.org/pypi/python-periphery
-pip3 install python-periphery
-pip3 install smbus2
-pip3 install i2cdev
+pip3 install python-periphery --break-system-packages
+pip3 install smbus2 --break-system-packages
+pip3 install i2cdev --break-system-packages
 
 # support for VCD files
-pip3 install pyvcd
+pip3 install pyvcd --break-system-packages
 
 # UDEV support can be used to search for peripherals loaded using DT overlays
 # https://pypi.python.org/pypi/pyudev
 # https://pypi.python.org/pypi/pyfdt
-pip3 install pyudev pyfdt
+pip3 install pyudev pyfdt --break-system-packages
 
 
 EOF_CHROOT
@@ -105,7 +105,7 @@ EOF_CHROOT
 git clone https://github.com/redpitaya/jupyter.git -b master $ROOT_DIR/home/jupyter/RedPitaya
 
 chroot $ROOT_DIR <<- EOF_CHROOT
-pip3 install -e /home/jupyter/RedPitaya
+pip3 install -e /home/jupyter/RedPitaya --break-system-packages
 EOF_CHROOT
 
 #mkdir $ROOT_DIR/home/jupyter/WhirlwindTourOfPython

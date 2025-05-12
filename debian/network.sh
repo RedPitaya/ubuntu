@@ -47,8 +47,9 @@ echo '    PermitRootLogin yes' >> /etc/ssh/sshd_config
 /bin/rm -v /etc/ssh/ssh_host_*
 
 # WiFi tools
-# TODO: install was asking about /etc/{protocols,services}
-apt-get -y install linux-firmware
+# Install if need
+# apt-get -y install linux-firmware
+
 apt-get -y install wpasupplicant iw
 
 # WiFi tools (AP)

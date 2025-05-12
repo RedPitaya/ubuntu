@@ -53,27 +53,9 @@ EOF_CHROOT
 
 
 echo "################################################################################"
-echo "# Install cmake 3.22"
+echo "# Install cmake"
 echo "################################################################################"
 
-# chroot $ROOT_DIR <<- EOF_CHROOT
-
-# export DEBIAN_FRONTEND=noninteractive
-
-# cd /tmp
-# apt -y install build-essential libssl-dev
-# curl -L https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1.tar.gz -o cmake-3.22.1.tar.gz
-# tar -zxvf cmake-3.22.1.tar.gz
-# cd cmake-3.22.1
-# ./bootstrap --parallel=$(grep processor /proc/cpuinfo | wc -l)
-# make -j$(grep processor /proc/cpuinfo | wc -l)
-# make install
-# rm -rf /tmp/cmake-3.22.1
-# rm -rf /tmp/cmake-3.22.1.tar.gz
-
-# EOF_CHROOT
-
-# INSTALL via PIP
 
 chroot $ROOT_DIR <<- EOF_CHROOT
 

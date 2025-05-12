@@ -36,7 +36,7 @@ sed -i 's/--no-beep/--no-beep --disable-ssl/' /etc/default/shellinabox
 
 apt-get -y install libcrypto++-dev
 apt-get -y install libboost-dev
-apt-get -y install libluajit
+apt-get -y install luajit
 apt-get -y install libluajit-5.1-dev
 apt-get -y install libpcre3-dev
 apt-get -y install libcurl4-openssl-dev

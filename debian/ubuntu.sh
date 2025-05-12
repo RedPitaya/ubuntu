@@ -15,7 +15,7 @@ else
 fi
 
 # Install Ubuntu base system to the root file system
-UBUNTU_BASE_VER=22.04
+UBUNTU_BASE_VER=24.04.2
 UBUNTU_BASE_TAR=ubuntu-base-${UBUNTU_BASE_VER}-base-armhf.tar.gz
 UBUNTU_BASE_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/${UBUNTU_BASE_VER}/release/${UBUNTU_BASE_TAR}
 test -f $UBUNTU_BASE_TAR || curl -L $UBUNTU_BASE_URL -o $UBUNTU_BASE_TAR
@@ -35,9 +35,9 @@ sudo mount -o bind /run "${ROOT_DIR}/run"
 
 
 SETUP_PYTHON=1
-SETUP_HWE=1
 SETUP_KEYBOARD=1
 SETUP_TZ=1
+SETUP_HWE=1
 
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -95,7 +95,7 @@ EOF_CHROOT
 if [[ $SETUP_PYTHON == 1 ]]
 then
 echo "################################################################################"
-echo "# python3.10-full settings"
+echo "# python3.12-full settings"
 echo "################################################################################"
 
 chroot $ROOT_DIR <<- EOF_CHROOT
@@ -110,7 +110,7 @@ apt-get -y install python3-pip
 apt-get -y install python-is-python3
 apt-get -y install python3-dev
 
-pip install --upgrade pip setuptools==70.0.0 wheel packaging
+pip install --upgrade pip setuptools wheel packaging --break-system-packages
 
 # need for build DTC
 apt-get -y install swig
@@ -258,6 +258,9 @@ debian/up_2.06.sh
 # Added libzip-dev package
 debian/up_2.07.sh
 
+# Set version 3.00 for ubuntu 24.04
+debian/up_3.00.sh
+
 if [[ $SETUP_HWE == 1 ]]
 then
 echo "################################################################################"
@@ -277,7 +280,7 @@ apt-get -y install kmod
 
 cd /tmp/
 
-curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2024.1.tar.gz -o /tmp/kernel.tar.gz
+curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2025-dev.tar.gz -o /tmp/kernel.tar.gz
 mkdir -p /usr/kernel
 tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 rm /tmp/kernel.tar.gz
