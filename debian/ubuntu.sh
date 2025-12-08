@@ -15,7 +15,7 @@ else
 fi
 
 # Install Ubuntu base system to the root file system
-UBUNTU_BASE_VER=24.04.2
+UBUNTU_BASE_VER=24.04.3
 UBUNTU_BASE_TAR=ubuntu-base-${UBUNTU_BASE_VER}-base-armhf.tar.gz
 UBUNTU_BASE_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/${UBUNTU_BASE_VER}/release/${UBUNTU_BASE_TAR}
 test -f $UBUNTU_BASE_TAR || curl -L $UBUNTU_BASE_URL -o $UBUNTU_BASE_TAR
@@ -280,7 +280,7 @@ apt-get -y install kmod
 
 cd /tmp/
 
-curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2025-dev.tar.gz -o /tmp/kernel.tar.gz
+curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2026.1.tar.gz -o /tmp/kernel.tar.gz
 mkdir -p /usr/kernel
 tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 rm /tmp/kernel.tar.gz
