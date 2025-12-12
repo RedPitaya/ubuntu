@@ -1,8 +1,8 @@
 [Match]
-Name=eth0
+Name=end0
 
 [Network]
-LinkLocalAddressing=ipv4
+LinkLocalAddressing=yes
 DHCP=ipv4
 IPForward=yes
 IPMasquerade=yes

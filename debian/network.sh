@@ -24,6 +24,9 @@ install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/hostapd@.service       
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/iptables.service                $ROOT_DIR/etc/systemd/system/iptables.service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/wpa_supplicant@.path            $ROOT_DIR/etc/systemd/system/wpa_supplicant@.path
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/hostapd@.path                   $ROOT_DIR/etc/systemd/system/hostapd@.path
+install -v -m 664 -o root -D $OVERLAY/etc/sysctl.d/99-ip-forwarding.conf                 $ROOT_DIR/etc/sysctl.d/99-ip-forwarding.conf
+
+
 
 # Avahi daemon configuration files
 install -v -m 664 -o root -D $OVERLAY/etc/avahi/services/ssh.service                     $ROOT_DIR/etc/avahi/services/ssh.service
@@ -34,6 +37,9 @@ install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/hostname-mac.service   
 chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
+
+# network resolve
+apt-get -y install systemd-resolved
 
 # network tools
 apt-get -y install iproute2 iputils-ping curl
