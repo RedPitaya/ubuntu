@@ -72,37 +72,11 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 export LANG='C' LC_ALL='C' LANGUAGE='C'
 export DEBIAN_FRONTEND=noninteractive
 
-# https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/libiio#how_to_build_it
-apt-get -y install libxml2 libxml2-dev bison flex libcdk5-dev
+apt-get -y install libiio-utils libiio-dev
+apt-get -y install python3-libiio
 
-#git clone --branch v0.10 --depth 1 https://github.com/analogdevicesinc/libiio.git
-curl -L https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.26.tar.gz -o libiio.tar.gz
-tar zxvf libiio.tar.gz
-cd libiio-0.26/
-cmake ./ -DPYTHON_BINDINGS=ON
-make all -j$(grep processor /proc/cpuinfo | wc -l)
-make install
-pip3 install bindings/python/ --break-system-packages
-# cleanup
-cd ../
-rm -rf libiio-0.26 libiio.tar.gz
 EOF_CHROOT
 
-
-## Ne10 library, the version in launchpad fails to build
-# TODO: 'make install' is not working yet
-#chroot $ROOT_DIR <<- EOF_CHROOT
-#sudo apt-get install cmake
-#git clone --depth 1 https://github.com/projectNe10/Ne10.git
-#cd Ne10
-#mkdir build && cd build             # Create the `build` directory and navigate into it
-#export NE10_LINUX_TARGET_ARCH=armv7 # Set the target architecture (can also be "aarch64")
-#cmake -DGNULINUX_PLATFORM=ON ..     # Run CMake to generate the build files
-#make                                # Build the project
-## cleanup
-#cd ../../
-#rm -rf Ne10
-#EOF_CHROOT
 
 # GPIO utilities
 chroot $ROOT_DIR <<- EOF_CHROOT

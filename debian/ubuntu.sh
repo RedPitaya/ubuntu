@@ -267,6 +267,8 @@ echo "##########################################################################
 echo "# install HWE kernel modules"
 echo "################################################################################"
 
+cp -rf $OVERLAY/lib/firmware $ROOT_DIR/lib
+
 chroot $ROOT_DIR <<- EOF_CHROOT
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -288,6 +290,10 @@ make -C /usr/kernel mrproper
 make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
 make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
 make -C /usr/kernel ARCH=arm modules_install -j$(nproc)
+
+
+# Update modules
+depmod -a 6.12.0-xilinx
 
 EOF_CHROOT
 fi
