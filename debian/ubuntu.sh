@@ -56,7 +56,7 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
-apt-get install locales
+apt-get install locales -y
 echo "LC_ALL=en_US.UTF-8" >> /etc/environment
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
@@ -112,7 +112,6 @@ apt-get -y install python3-dev
 
 pip install --upgrade pip setuptools wheel packaging --break-system-packages
 
-# need for build DTC
 apt-get -y install swig
 
 EOF_CHROOT
@@ -218,7 +217,6 @@ debian/zynq.sh
 debian/redpitaya.sh
 
 debian/jupyter.sh
-
 
 debian/watchdog.sh
 

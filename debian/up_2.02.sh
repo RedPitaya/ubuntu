@@ -16,7 +16,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo 2.02 > /root/.version
 
-apt-get install libsocketcan-dev
+apt-get install libsocketcan-dev -y
 
 
 EOF_CHROOT

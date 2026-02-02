@@ -10,19 +10,22 @@ echo "##########################################################################
 echo "# Up to 2.03"
 echo "################################################################################"
 
+# INFO
+# The package is installed in the jupyter.sh script
+
 chroot $ROOT_DIR <<- EOF_CHROOT
 
-export DEBIAN_FRONTEND=noninteractive
+# export DEBIAN_FRONTEND=noninteractive
 
-pip3 install --upgrade pip --break-system-packages
-pip3 install --upgrade notebook --break-system-packages
-pip3 install --upgrade bokeh --break-system-packages
-pip3 install --upgrade jupyterlab --break-system-packages
-pip3 install --upgrade jupyterlab_server --break-system-packages
-pip3 install --upgrade jupyterlab-widgets --break-system-packages
-pip3 install --upgrade jupyterlab-pygments --break-system-packages
-pip3 install --upgrade jupyter_core --break-system-packages
-pip3 install --upgrade jupyter_client --break-system-packages
+# pip3 install --upgrade pip --break-system-packages
+# pip3 install --upgrade notebook --break-system-packages
+# pip3 install --upgrade bokeh --break-system-packages
+# pip3 install --upgrade jupyterlab --break-system-packages
+# pip3 install --upgrade jupyterlab_server --break-system-packages
+# pip3 install --upgrade jupyterlab-widgets --break-system-packages
+# pip3 install --upgrade jupyterlab-pygments --break-system-packages
+# pip3 install --upgrade jupyter_core --break-system-packages
+# pip3 install --upgrade jupyter_client --break-system-packages
 
 echo 2.03 > /root/.version
 

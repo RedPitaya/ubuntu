@@ -18,53 +18,53 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -y install libsigrok4t64 libsigrokdecode4 sigrok-cli
 apt-get -y install libffi8 libffi-dev
 
-# OWFS 1-wire library
-# NOTE: for now do not install OWFS, and avoid another http/ftp server from running by default
-# apt-get -y install owfs python-ow
-
-# Python package manager, Jupyter dependencies
-# apt-get -y install python3-dev python3-cffi python3-wheel python3-setuptools python3-pip python3-zmq python3-jinja2 python3-pygments python3-six python3-html5lib python3-terminado python3-decorator python3-ptyprocess python3-pexpect python3-simplegeneric python3-wcwidth python3-pickleshare python3-bleach python3-mistune python3-jsonschema
-
 # Python numerical processing and plotting
 apt-get -y install gfortran libopenblas-dev liblapack-dev
-# APT
-apt-get -y install python3-numpy python3-scipy python3-pandas
-apt-get -y install python3-matplotlib
+
+# Need for pillow
+apt-get -y  install libjpeg-dev zlib1g-dev libpng-dev
 
 #----------------
 
 # Jupyterlab and ipywidgets
-pip3 install --upgrade pip --break-system-packages
-pip3 install meson meson-python pybind11 cython --break-system-packages
-pip3 install contourpy -U --no-build-isolation --break-system-packages
-pip3 install notebook jupyterlab --break-system-packages
-pip3 install ipywidgets qtconsole --break-system-packages
+pip3 install meson==1.6.1 --break-system-packages
+pip3 install meson-python==0.17.1 --break-system-packages
+pip3 install pybind11==2.13.6 --break-system-packages
+pip3 install cython==3.0.11 --break-system-packages
 
-# Jupyter declarative widgets
-pip3 install jupyter_declarativewidgets --break-system-packages
+pip3 install contourpy==1.3.1 -U --no-build-isolation --break-system-packages
 
-## Not work with jupyterlab
-##jupyter declarativewidgets quick-setup --sys-prefix
-## jupyter contrib nbextension enable --system --py widgetsnbextension
-## jupyter declarativewidgets install
-## jupyter contrib nbextension enable --sys-prefix --py --system declarativewidgets
+pip3 install notebook==7.3.2 --break-system-packages
+pip3 install jupyterlab==4.3.4 --break-system-packages
+pip3 install ipywidgets==8.1.8 --break-system-packages
+pip3 install qtconsole==5.6.1 --break-system-packages
+pip3 install bokeh==3.8.2 --break-system-packages
+pip3 install jupyterlab_server==2.27.3 --break-system-packages
+pip3 install jupyterlab-widgets==3.0.14 --break-system-packages
+pip3 install jupyterlab-pygments==0.3.0 --break-system-packages
+pip3 install jupyter_core==5.9.1 --break-system-packages
+pip3 install jupyter_client==8.8.0 --break-system-packages
+
+pip3 install numpy==2.4.1 --break-system-packages
+pip3 install scipy==1.17.0 --break-system-packages
+pip3 install pandas==3.0.0 --break-system-packages
+pip3 install matplotlib==3.10.0 --break-system-packages
 
 
-pip3 install jupyter_bokeh --break-system-packages
+pip3 install jupyter_bokeh==4.0.5 --break-system-packages
 
 # additional Python support for GPIO, LED, PWM, SPI, I2C, MMIO, Serial
 # https://pypi.python.org/pypi/python-periphery
-pip3 install python-periphery --break-system-packages
-pip3 install smbus2 --break-system-packages
-pip3 install i2cdev --break-system-packages
+pip3 install python-periphery==2.4.1 --break-system-packages
+pip3 install smbus2==0.5.0 --break-system-packages
+pip3 install i2cdev==0.0.6 --break-system-packages
 
 # support for VCD files
-pip3 install pyvcd --break-system-packages
+pip3 install pyvcd==0.4.1 --break-system-packages
 
 # UDEV support can be used to search for peripherals loaded using DT overlays
-# https://pypi.python.org/pypi/pyudev
-# https://pypi.python.org/pypi/pyfdt
-pip3 install pyudev pyfdt --break-system-packages
+pip3 install pyudev==0.24.3 --break-system-packages
+pip3 install pyfdt==0.3 --break-system-packages
 
 
 EOF_CHROOT
@@ -102,10 +102,11 @@ EOF_CHROOT
 ###############################################################################
 
 #mkdir $ROOT_DIR/home/jupyter/RedPitaya
-git clone https://github.com/redpitaya/jupyter.git -b master $ROOT_DIR/home/jupyter/RedPitaya
+git clone https://github.com/redpitaya/jupyter.git -b Release-2026.1 $ROOT_DIR/home/jupyter/RedPitaya
 
 chroot $ROOT_DIR <<- EOF_CHROOT
-pip3 install -e /home/jupyter/RedPitaya --break-system-packages
+export PIP_BREAK_SYSTEM_PACKAGES=1
+pip3 install -e /home/jupyter/RedPitaya --no-build-isolation
 EOF_CHROOT
 
 #mkdir $ROOT_DIR/home/jupyter/WhirlwindTourOfPython

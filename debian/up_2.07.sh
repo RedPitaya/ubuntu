@@ -16,7 +16,7 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get install libzip-dev
+apt-get install libzip-dev -y
 
 echo 2.07 > /root/.version
 
