@@ -31,7 +31,6 @@ install -v -m 664 -o root -D $OVERLAY/etc/sysctl.d/99-ip-forwarding.conf        
 # Avahi daemon configuration files
 install -v -m 664 -o root -D $OVERLAY/etc/avahi/services/ssh.service                     $ROOT_DIR/etc/avahi/services/ssh.service
 install -v -m 664 -o root -D $OVERLAY/etc/avahi/services/bazaar.service                  $ROOT_DIR/etc/avahi/services/bazaar.service
-install -v -m 664 -o root -D $OVERLAY/etc/avahi/services/scpi.service                    $ROOT_DIR/etc/avahi/services/scpi.service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/hostname-mac.service            $ROOT_DIR/etc/systemd/system/hostname-mac.service
 
 chroot $ROOT_DIR <<- EOF_CHROOT
