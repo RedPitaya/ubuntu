@@ -278,17 +278,20 @@ export ARCH=arm
 
 apt-get -y install kmod
 
-cd /tmp/
+rm -rf /tmp/kernel
 
-curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2026.1.tar.gz -o /tmp/kernel.tar.gz
-mkdir -p /usr/kernel
-tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
-rm /tmp/kernel.tar.gz
-make -C /usr/kernel mrproper
-make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
-make -C /usr/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
-make -C /usr/kernel ARCH=arm modules_install -j$(nproc)
+git clone https://github.com/RedPitaya/linux-xlnx --depth 1 --branch branch-redpitaya-v2026.1 /tmp/kernel
+cd /tmp/kernel
 
+#wget -c https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2026.1.tar.gz -o /tmp/kernel.tar.gz
+#mkdir -p /usr/kernel
+#tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
+#rm /tmp/kernel.tar.gz
+make -C /tmp/kernel mrproper
+make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
+make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
+make -C /tmp/kernel ARCH=arm modules_install -j$(nproc)
+rm -rf /tmp/kernel
 
 # Update modules
 depmod -a 6.12.0-xilinx
