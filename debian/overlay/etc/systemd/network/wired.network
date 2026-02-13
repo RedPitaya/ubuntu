@@ -1,5 +1,5 @@
 [Match]
-Name=end0
+Name=eth0
 
 [Network]
 LinkLocalAddressing=yes
