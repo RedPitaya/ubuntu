@@ -49,6 +49,10 @@ apt-get -y install gdb cgdb libcunit1-ncurses-dev
 
 apt-get -y install libssl-dev
 
+# gpiod
+
+apt-get -y install libgpiod-dev gpiod
+
 EOF_CHROOT
 
 
