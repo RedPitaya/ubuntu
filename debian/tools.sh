@@ -53,6 +53,9 @@ apt install -y libubootenv-tool
 
 apt-get -y install ntp
 
+# Report utility
+apt-get -y install tree
+
 EOF_CHROOT
 
 # config for fw_printenv
