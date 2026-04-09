@@ -40,7 +40,7 @@ pip3 install ipywidgets==8.1.8 --break-system-packages
 pip3 install qtconsole==5.6.1 --break-system-packages
 pip3 install bokeh==3.8.2 --break-system-packages
 pip3 install jupyterlab_server==2.27.3 --break-system-packages
-pip3 install jupyterlab-widgets==3.0.14 --break-system-packages
+pip3 install jupyterlab-widgets==3.0.15 --break-system-packages
 pip3 install jupyterlab-pygments==0.3.0 --break-system-packages
 pip3 install jupyter_core==5.9.1 --break-system-packages
 pip3 install jupyter_client==8.8.0 --break-system-packages
@@ -57,7 +57,7 @@ pip3 install jupyter_bokeh==4.0.5 --break-system-packages
 # https://pypi.python.org/pypi/python-periphery
 pip3 install python-periphery==2.4.1 --break-system-packages
 pip3 install smbus2==0.5.0 --break-system-packages
-pip3 install i2cdev==0.0.6 --break-system-packages
+pip3 install i2cdev==1.2.4 --break-system-packages
 
 # support for VCD files
 pip3 install pyvcd==0.4.1 --break-system-packages
