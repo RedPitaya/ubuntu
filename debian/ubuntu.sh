@@ -290,7 +290,7 @@ cd /tmp/kernel
 make -C /tmp/kernel mrproper
 make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
 make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
-make -C /tmp/kernel ARCH=arm modules_install -j$(nproc)
+make -C /tmp/kernel ARCH=arm modules_install INSTALL_MOD_PATH=/lib/modules/6.12.0-xilinx -j$(nproc)
 rm -rf /tmp/kernel
 
 # Update modules
