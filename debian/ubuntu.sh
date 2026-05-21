@@ -283,18 +283,25 @@ rm -rf /tmp/kernel
 git clone https://github.com/RedPitaya/linux-xlnx --depth 1 --branch branch-redpitaya-v2026.1 /tmp/kernel
 cd /tmp/kernel
 
+# Remove Git metadata to reduce clutter and avoid version tracking confusion
+rm -rf .git .github
+# Create empty SCM version file to prevent the kernel from appending Git hash to version string
+touch .scmversion
+
 #wget -c https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2026.1.tar.gz -o /tmp/kernel.tar.gz
 #mkdir -p /usr/kernel
 #tar -zxf /tmp/kernel.tar.gz --strip-components=1 --directory=/usr/kernel
 #rm /tmp/kernel.tar.gz
+
 make -C /tmp/kernel mrproper
 make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig  -j$(nproc)
 make -C /tmp/kernel KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm modules -j$(nproc)
-make -C /tmp/kernel ARCH=arm modules_install INSTALL_MOD_PATH=/lib/modules/6.12.0-xilinx -j$(nproc)
+make -C /tmp/kernel ARCH=arm modules_install INSTALL_MOD_PATH= -j$(nproc)
+
 rm -rf /tmp/kernel
 
 # Update modules
-depmod -a 6.12.0-xilinx
+depmod -a 6.12.0-redpitaya
 
 EOF_CHROOT
 fi

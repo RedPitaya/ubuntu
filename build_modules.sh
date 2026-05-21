@@ -80,7 +80,7 @@ fi
 
 schroot -c red-pitaya-ubuntu <<- EOL_CHROOT
 
-curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2024.1.tar.gz -o ./kernel.tar.gz
+curl -L https://github.com/RedPitaya/linux-xlnx/archive/branch-redpitaya-v2026.1.tar.gz -o ./kernel.tar.gz
 tar -zxf ./kernel.tar.gz --strip-components=1 --directory=./
 rm ./kernel.tar.gz
 make KCFLAGS="-O2 -march=armv7-a -mtune=cortex-a9" ARCH=arm redpitaya_zynq_defconfig
