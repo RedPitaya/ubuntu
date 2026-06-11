@@ -18,6 +18,13 @@ echo "=== [1/5] Aggressive Docker Cache & Old Image Cleanup ==="
 if docker images -q "${FULL_IMAGE_NAME}" > /dev/null 2>&1; then
     docker rmi -f "${FULL_IMAGE_NAME}" || true
 fi
+
+# Stop and remove any leftover containers from previous runs
+if docker ps -q -f name="${CONTAINER_NAME}" | grep -q .; then
+    echo "Container ${CONTAINER_NAME} is running. Stopping..."
+    docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+fi
+
 # Remove any leftover containers from previous runs
 docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
 

@@ -56,6 +56,8 @@ apt-get -y install ntp
 # Report utility
 apt-get -y install tree
 
+apt-get install lshw ethtool ftp -y
+
 EOF_CHROOT
 
 # config for fw_printenv
