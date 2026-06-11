@@ -14,15 +14,21 @@ CONTAINER_NAME="rp-builder-${BUILD_NUM}"
 
 echo "=== [1/5] Aggressive Docker Cache & Old Image Cleanup ==="
 
+# Stop and remove any leftover containers from previous runs
+if docker ps -a -q -f name="${CONTAINER_NAME}" | grep -q .; then
+    echo "Found existing container ${CONTAINER_NAME}. Saving logs..."
+    docker logs "${CONTAINER_NAME}" > "artifacts/previous_build_${BUILD_NUM}.log" 2>/dev/null || true
+    echo "Stopping and removing old container..."
+    docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+    docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
+    echo "Old container ${CONTAINER_NAME} removed."
+else
+    echo "No existing container named ${CONTAINER_NAME}. Starting fresh."
+fi
+
 # Remove existing builder image to force a completely clean rebuild
 if docker images -q "${FULL_IMAGE_NAME}" > /dev/null 2>&1; then
     docker rmi -f "${FULL_IMAGE_NAME}" || true
-fi
-
-# Stop and remove any leftover containers from previous runs
-if docker ps -q -f name="${CONTAINER_NAME}" | grep -q .; then
-    echo "Container ${CONTAINER_NAME} is running. Stopping..."
-    docker stop "${CONTAINER_NAME}" 2>/dev/null || true
 fi
 
 # Remove any leftover containers from previous runs
