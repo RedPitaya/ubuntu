@@ -14,6 +14,18 @@ else
     exit
 fi
 
+# From docker
+echo "=== Build Info ==="
+echo "Build number: $BUILD_NUM"
+echo "Git commit: $GIT_COMMIT"
+echo "Build date: $DATE"
+
+cat > $ROOT_DIR/root/.build_info << BUILD_INFO
+Build Number: $BUILD_NUM
+Git Commit: $GIT_COMMIT
+Build Date: $DATE
+BUILD_INFO
+
 # Install Ubuntu base system to the root file system
 UBUNTU_BASE_VER=24.04.3
 UBUNTU_BASE_TAR=ubuntu-base-${UBUNTU_BASE_VER}-base-armhf.tar.gz
