@@ -29,9 +29,9 @@ SIZE=7400
 
 # Build image name with optional build number and version
 if [ -n "${BUILD_NUM}" ] && [ "${BUILD_NUM}" != "local" ]; then
-    export IMAGE_NAME="redpitaya_OS_${VERSION}.${BUILD_NUM}_${DATE}"
+    export IMAGE_NAME="redpitaya_OS_${VERSION}.${BUILD_NUM}"
 else
-    export IMAGE_NAME="redpitaya_OS_${VERSION}_${DATE}"
+    export IMAGE_NAME="redpitaya_OS_${VERSION}"
 fi
 export IMAGE="${IMAGE_NAME}.img"
 
