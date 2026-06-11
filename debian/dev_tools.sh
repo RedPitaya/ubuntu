@@ -53,6 +53,10 @@ apt-get -y install libssl-dev
 
 apt-get -y install libgpiod-dev gpiod
 
+apt-get install libsocketcan-dev -y
+
+apt-get install libzip-dev -y
+
 EOF_CHROOT
 
 

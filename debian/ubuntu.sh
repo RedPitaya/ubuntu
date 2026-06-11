@@ -24,7 +24,13 @@ cat > $ROOT_DIR/root/.build_info << BUILD_INFO
 Build Number: $BUILD_NUM
 Git Commit: $GIT_COMMIT
 Build Date: $DATE
+Version: $VERSION
 BUILD_INFO
+
+cat > $ROOT_DIR/root/.version << BUILD_INFO
+$VERSION
+BUILD_INFO
+
 
 # Install Ubuntu base system to the root file system
 UBUNTU_BASE_VER=24.04.3
@@ -232,44 +238,7 @@ debian/jupyter.sh
 
 debian/watchdog.sh
 
-# Up to version version 1.05
-debian/up_1.05.sh
-
-# Installed CA sertificates -> up to version 1.06
-
-# Up to version version 1.07
 debian/wireless_tool.sh
-
-# Up to version version 1.08
-debian/up_1.08.sh
-
-# Up to version 2.0 (new ubuntu 22.04)
-
-debian/up_2.0.sh
-
-# Added new kernel modules from external repository
-debian/up_2.01.sh
-
-# Added libsocketcan library
-debian/up_2.02.sh
-
-# Added path to python rp api
-debian/up_2.03.sh
-
-# All wifi drivers loading from modules
-debian/up_2.04.sh
-
-# Update jupyter code
-debian/up_2.05.sh
-
-# Added service for e3_led_controller
-debian/up_2.06.sh
-
-# Added libzip-dev package
-debian/up_2.07.sh
-
-# Set version 3.00 for ubuntu 24.04
-debian/up_3.00.sh
 
 if [[ $SETUP_HWE == 1 ]]
 then
@@ -353,7 +322,7 @@ rm $ROOT_DIR/usr/bin/qemu-arm-static
 
 # create a tarball (without resolv.conf link, since it causes schroot issues)
 rm $ROOT_DIR/etc/resolv.conf
-tar -cpzf redpitaya_OS_${DATE}.tar.gz --one-file-system -C $ROOT_DIR .
+tar -cpzf ${IMAGE_NAME}.tar.gz --one-file-system -C $ROOT_DIR .
 ln -sf /run/systemd/resolve/resolv.conf $ROOT_DIR/etc/resolv.conf
 
 # one final sync to be sure

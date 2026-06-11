@@ -21,13 +21,19 @@ export LC_CTYPE=en_US.UTF-8
 apt install -y qemu-user-static curl
 
 # current time and date are used to create the image name
-export DATE=`date +"%H-%M-%S_%d-%b-%Y"`
+export DATE=`date +"%Y-%b-%d_%H-%M-%S"`
+export VERSION='3.00'
 
 # default image size if 3GB, which is appropriate for all 4BG SD cards
 SIZE=7400
 
-#IMAGE=$1
-IMAGE=redpitaya_OS_${DATE}.img
+# Build image name with optional build number and version
+if [ -n "${BUILD_NUM}" ] && [ "${BUILD_NUM}" != "local" ]; then
+    export IMAGE_NAME="redpitaya_OS_${VERSION}.${BUILD_NUM}_${DATE}"
+else
+    export IMAGE_NAME="redpitaya_OS_${VERSION}_${DATE}"
+fi
+export IMAGE="${IMAGE_NAME}.img"
 
 # Create the empty image file
 dd if=/dev/zero of=$IMAGE bs=1M count=$SIZE

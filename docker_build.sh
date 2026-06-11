@@ -53,7 +53,6 @@ docker run --privileged --rm \
     -v "$(pwd)/artifacts":/artifacts \
     -e BUILD_NUM="${BUILD_NUM}" \
     -e GIT_COMMIT="${GIT_COMMIT}" \
-    -e DATE="$(date +'%Y-%b-%d_%H-%M-%S')" \
     "${FULL_IMAGE_NAME}" /bin/bash -c "
 
         # Verify we are running inside the Docker container, not on the host

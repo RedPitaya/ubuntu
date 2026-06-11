@@ -61,6 +61,7 @@ install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/sockproc.service       
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_scpi.service      $ROOT_DIR/etc/systemd/system/redpitaya_scpi.service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_startup.service   $ROOT_DIR/etc/systemd/system/redpitaya_startup.service
 install -v -m 664 -o root -D $OVERLAY/etc/sysconfig/redpitaya                        $ROOT_DIR/etc/sysconfig/redpitaya
+install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_e3_controller.service   $ROOT_DIR/etc/systemd/system/redpitaya_e3_controller.service
 
 cp -r $OVERLAY/etc/systemd/system/serial-getty@ttyPS0.service.d $ROOT_DIR/etc/systemd/system/serial-getty@ttyPS0.service.d
 
@@ -69,6 +70,7 @@ systemctl enable redpitaya_nginx
 systemctl enable redpitaya_startup
 systemctl enable sockproc
 #systemctl enable redpitaya_scpi
+systemctl enable redpitaya_e3_controller.service
 EOF_CHROOT
 
 echo '################################################################################'

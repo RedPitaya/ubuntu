@@ -92,6 +92,9 @@ install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_co
 install -v -m 664 -o root -D  $OVERLAY/home/jupyter/.jupyter/jupyter_notebook_config.py \
                              $ROOT_DIR/home/jupyter/.jupyter/jupyter_notebook_config.py
 
+install -v -m 664 -o root -D $OVERLAY/usr/local/share/jupyter/kernels/python3/kernel.json
+                             $ROOT_DIR/usr/local/share/jupyter/kernels/python3/kernel.json
+
 chroot $ROOT_DIR <<- EOF_CHROOT
 chown -v -R jupyter:jupyter /home/jupyter/.jupyter
 systemctl enable jupyter

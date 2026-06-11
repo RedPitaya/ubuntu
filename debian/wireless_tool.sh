@@ -1,6 +1,3 @@
-
-
-# Added by DM; 2017/10/17 to check ROOT_DIR setting
 if [ $ROOT_DIR ]; then
     echo ROOT_DIR is "$ROOT_DIR"
 else
@@ -19,7 +16,5 @@ apt -y install wireless-tools
 systemctl enable netstart.service
 systemctl disable wpa_supplicant@wlan0.service
 rm -f /etc/systemd/system/wpa_supplicant@.service
-
-echo 1.07 > /root/.version
 
 EOF_CHROOT
