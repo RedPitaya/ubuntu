@@ -130,4 +130,28 @@ fuser -km $ROOT_DIR
 umount $BOOT_DIR $ROOT_DIR
 rm -rf $BOOT_DIR $ROOT_DIR
 
-zip $IMAGE.zip $IMAGE
+
+# Create build info file
+cat > info.txt << BUILD_INFO
+Build Number: ${BUILD_NUM:-local}
+Git Commit: ${GIT_COMMIT:-unknown}
+Build Date: ${DATE}
+Version: ${VERSION}
+Image: ${IMAGE_NAME}
+BUILD_INFO
+
+echo "Build info created:"
+cat info.txt
+
+# Create MD5 hash file for the image
+md5sum $IMAGE | awk '{print $1}' > md5.txt
+echo "MD5 hash created:"
+cat md5.txt
+
+################################################################################
+# package image with info files
+################################################################################
+
+# Add info.txt and md5.txt to the zip alongside the image
+zip $IMAGE.zip $IMAGE info.txt md5.txt
+
