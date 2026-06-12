@@ -114,7 +114,7 @@ mount -o loop,offset=$ROOT_OFFSET $IMAGE $ROOT_DIR
 # install OS
 ################################################################################
 
-debian/ubuntu.sh 2>&1 | tee $ROOT_DIR/buildlog.txt
+# debian/ubuntu.sh 2>&1 | tee $ROOT_DIR/buildlog.txt
 # not fixed
 # debian/debian.sh 2>&1 | tee $ROOT_DIR/buildlog.txt
 
@@ -131,3 +131,4 @@ umount $BOOT_DIR $ROOT_DIR
 rm -rf $BOOT_DIR $ROOT_DIR
 
 zip $IMAGE.zip $IMAGE
+touch $IMAGE.tag.gz
