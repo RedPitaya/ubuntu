@@ -5,6 +5,14 @@ FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBCONF_NOWARNINGS=yes
 
+# Set bash as the default shell (fixes "history: not found" in dash)
+SHELL ["/bin/bash", "-c"]
+ENV SHELL=/bin/bash
+
+# Suppress debconf warnings about missing kernel modules
+ENV CONFIG_SITE=/etc/dpkg-cross/cross-config.arm64
+RUN echo 'ac_cv_prog_LSMOD=lsmod' >> /etc/dpkg-cross/cross-config.arm64 2>/dev/null || true
+
 # Install all build toolchain dependencies, cross-compilation layers, and disk partitioning utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bc \
@@ -20,6 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     inotify-tools \
     parted \
+    psmisc \
+    python3-pip \
     util-linux \
     qemu-user-static \
     rsync \
@@ -30,6 +40,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xz-utils \
     zip \
     && rm -rf /var/lib/apt/lists/*
+
+# Ensure /bin/sh points to bash (Ubuntu uses dash by default)
+RUN ln -sf /bin/bash /bin/sh
 
 # Generate and configure the missing en_US.UTF-8 locale to prevent layout errors
 RUN locale-gen en_US.UTF-8
@@ -49,5 +62,5 @@ RUN chmod +x *.sh dev_scripts/*.sh debian/*.sh 2>/dev/null || true
 # Set up the internal work directory
 WORKDIR /build
 
-# Execute the default build script
-CMD ["./build.sh"]
+# Execute the default build script using bash explicitly
+CMD ["/bin/bash", "./build.sh"]
