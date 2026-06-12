@@ -51,10 +51,10 @@ cat > $ROOT_DIR/root/.version << BUILD_INFO
 $VERSION
 BUILD_INFO
 
-SETUP_PYTHON=1
-SETUP_KEYBOARD=1
-SETUP_TZ=1
-SETUP_HWE=1
+SETUP_PYTHON=0
+SETUP_KEYBOARD=0
+SETUP_TZ=0
+SETUP_HWE=0
 
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -225,19 +225,19 @@ echo "##########################################################################
 echo "# run other scripts"
 echo "################################################################################"
 
-debian/tools.sh
-debian/dev_tools.sh
-debian/network.sh
-debian/zynq.sh
+# debian/tools.sh
+# debian/dev_tools.sh
+# debian/network.sh
+# debian/zynq.sh
 
 
-debian/redpitaya.sh
+# debian/redpitaya.sh
 
-debian/jupyter.sh
+# debian/jupyter.sh
 
-debian/watchdog.sh
+# debian/watchdog.sh
 
-debian/wireless_tool.sh
+# debian/wireless_tool.sh
 
 if [[ $SETUP_HWE == 1 ]]
 then
