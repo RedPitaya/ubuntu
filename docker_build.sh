@@ -87,7 +87,7 @@ docker run --privileged --rm \
         echo '=== Artifact Filtering: Extracting tar.gz and zip files ==='
 
         # Find and copy all .tar.gz and .zip artifacts, rename with build number
-        find /build -maxdepth 3 -type f \( -name '*.tar.gz' -o -name '*.zip' \) | while read -r file; do
+        find /build -maxdepth 3 -type f \( -name 'redpitaya*.tar.gz' -o -name 'redpitaya*.zip' \) | while read -r file; do
             filename=\$(basename \"\$file\")
 
             # Handle double extension for .tar.gz files
@@ -99,7 +99,7 @@ docker run --privileged --rm \
                 ext='zip'
             fi
 
-            new_name=\"\${base}-b\${BUILD_NUM}.\${ext}\"
+            new_name=\"\${base}.\${ext}\"
             echo \"  Copying: \$filename -> artifacts/\$new_name\"
             cp \"\$file\" \"/artifacts/\$new_name\"
         done
