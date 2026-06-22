@@ -118,6 +118,8 @@ debian/ubuntu.sh 2>&1 | tee $ROOT_DIR/buildlog.txt
 # not fixed
 # debian/debian.sh 2>&1 | tee $ROOT_DIR/buildlog.txt
 
+debian/check_build_log.sh
+
 ################################################################################
 # umount image
 ################################################################################
