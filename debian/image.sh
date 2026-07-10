@@ -22,7 +22,7 @@ apt install -y qemu-user-static curl
 
 # current time and date are used to create the image name
 export DATE=`date +"%Y-%b-%d_%H-%M-%S"`
-export VERSION='3.00'
+export VERSION='3.01'
 
 # default image size if 3GB, which is appropriate for all 4BG SD cards
 SIZE=7400

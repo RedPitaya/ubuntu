@@ -57,6 +57,8 @@ apt-get install libsocketcan-dev -y
 
 apt-get install libzip-dev -y
 
+apt install libpugixml-dev -y
+
 EOF_CHROOT
 
 
