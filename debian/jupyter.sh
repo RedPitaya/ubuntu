@@ -66,6 +66,7 @@ pip3 install pyvcd==0.4.1 --break-system-packages
 pip3 install pyudev==0.24.3 --break-system-packages
 pip3 install pyfdt==0.3 --break-system-packages
 
+pip3 install nptdms --break-system-packages
 
 EOF_CHROOT
 
