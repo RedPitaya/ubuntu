@@ -1,0 +1,19 @@
+[Unit]
+Description=Disable 802.11 power save on %i
+Documentation=man:iw(8)
+
+# Bound to the device, not to a target: this runs whenever the interface shows
+# up - at boot, on USB dongle hot-plug, and again after a replug. Power save is
+# a per-interface mac80211 setting that resets on every bring-up, so it has to
+# be reapplied each time rather than set once at install.
+BindsTo=sys-subsystem-net-devices-%i.device
+After=sys-subsystem-net-devices-%i.device
+Before=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/iw dev %i set power_save off
+
+[Install]
+WantedBy=sys-subsystem-net-devices-%i.device

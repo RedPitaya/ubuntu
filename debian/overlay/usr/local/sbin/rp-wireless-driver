@@ -1,0 +1,77 @@
+#!/bin/sh
+#
+# Classify a wireless interface by driver generation, so systemd can pick the
+# right wpa_supplicant unit without a wrapper owning the boot path.
+#
+#   rp-wireless-driver class       <iface>   print nl80211 | wext | none
+#   rp-wireless-driver is-nl80211  <iface>   exit 0 if cfg80211/nl80211 driver
+#   rp-wireless-driver is-wext     <iface>   exit 0 if wireless-extensions only
+#   rp-wireless-driver wext-preset <iface>   pre-set Managed mode + ESSID
+#
+# Used from ExecCondition= in wpa_supplicant@.service and
+# wpa_supplicant_wext@.service. systemd treats a non-zero ExecCondition as a
+# SKIPPED unit rather than a failed one, so both units can be enabled at the
+# same time and exactly one of them proceeds. Exit codes stay in 1..254; 255 and
+# signals would be reported as genuine failures.
+#
+# Detection is by capability, not by USB id: a real nl80211 device answers
+# `iw dev <iface> info` whether or not it is associated. Do not substitute
+# `iwconfig <iface> | grep Link` for this - mac80211 drivers only print the
+# "Link Quality" line once associated, so that test flips with link state.
+
+set -u
+
+MODE=${1:-}
+IF=${2:-}
+CONF=/opt/redpitaya/wpa_supplicant.conf
+
+usage() {
+    echo "usage: $0 {class|is-nl80211|is-wext|wext-preset} <iface>" >&2
+    exit 2
+}
+
+[ -n "$MODE" ] && [ -n "$IF" ] || usage
+
+classify() {
+    if ! ip link show "$IF" >/dev/null 2>&1; then
+        echo none
+    elif iw dev "$IF" info >/dev/null 2>&1; then
+        echo nl80211
+    elif iwconfig "$IF" 2>/dev/null | grep -q 'IEEE 802\.11\|ESSID'; then
+        echo wext
+    else
+        echo none
+    fi
+}
+
+# ssid="..." from the supplicant config. Anchored, and stops at the first hit,
+# so it cannot be confused by scan_ssid= or by a second network block.
+read_ssid() {
+    [ -r "$CONF" ] || return 1
+    sed -n 's/^[[:space:]]*ssid="\(.*\)"[[:space:]]*$/\1/p' "$CONF" | head -1
+}
+
+case "$MODE" in
+    class)
+        classify
+        ;;
+    is-nl80211)
+        [ "$(classify)" = nl80211 ]
+        ;;
+    is-wext)
+        [ "$(classify)" = wext ]
+        ;;
+    wext-preset)
+        # Legacy out-of-tree drivers (rtl8188eu and friends) want the interface
+        # put into Managed mode with the ESSID already set before the supplicant
+        # attaches over wext. Harmless if it fails; the supplicant is still the
+        # component that authenticates.
+        SSID=$(read_ssid) || exit 0
+        [ -n "${SSID:-}" ] || exit 0
+        iwconfig "$IF" mode Managed essid "$SSID" 2>/dev/null || true
+        exit 0
+        ;;
+    *)
+        usage
+        ;;
+esac
