@@ -12,6 +12,7 @@ chroot $ROOT_DIR <<- EOF_CHROOT
 
 export DEBIAN_FRONTEND=noninteractive
 apt -y install wireless-tools
+apt -y install wireless-regdb
 
 systemctl enable netstart.service
 systemctl disable wpa_supplicant@wlan0.service
