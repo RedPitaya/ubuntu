@@ -2,7 +2,7 @@
 Name=eth0
 
 [Network]
-LinkLocalAddressing=yes
+LinkLocalAddressing=fallback
 DHCP=ipv4
 IPForward=yes
 IPMasquerade=yes

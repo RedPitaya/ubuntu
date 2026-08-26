@@ -3,7 +3,7 @@ Name=wlan0*
 
 [Network]
 Description = Wireless IP interface
-LinkLocalAddressing=ipv4
+LinkLocalAddressing=ipv6
 DHCPServer=yes
 
 [Address]

@@ -2,7 +2,7 @@
 Name=wlan*
 
 [Network]
-LinkLocalAddressing=ipv4
+LinkLocalAddressing=fallback
 DHCP=ipv4
 
 [DHCP]
