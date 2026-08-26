@@ -127,7 +127,12 @@ apt-get -y install python3-pip
 apt-get -y install python-is-python3
 apt-get -y install python3-dev
 
-pip install --upgrade pip setuptools wheel packaging --break-system-packages
+pip install --ignore-installed --break-system-packages \
+    "pip==24.3.1" \
+    "setuptools==75.6.0" \
+    "wheel==0.45.1" \
+    "packaging==24.2" \
+    "cython==3.1.2"
 
 apt-get -y install swig
 

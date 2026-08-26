@@ -30,7 +30,10 @@ apt-get -y  install libjpeg-dev zlib1g-dev libpng-dev
 pip3 install meson==1.6.1 --break-system-packages
 pip3 install meson-python==0.17.1 --break-system-packages
 pip3 install pybind11==2.13.6 --break-system-packages
-pip3 install cython==3.0.11 --break-system-packages
+# numpy (pulled in below, and transitively by contourpy) requires
+# Cython >= 3.1.0 to build from source on armhf, where no prebuilt
+# wheel exists -- 3.0.11 fails meson's version check.
+pip3 install cython==3.1.2 --break-system-packages
 
 pip3 install contourpy==1.3.1 -U --no-build-isolation --break-system-packages
 
