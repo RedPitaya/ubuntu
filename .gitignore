@@ -1,1 +1,10 @@
+artifacts/
+out/
+boot/
+root/
+.cache/
 diff.txt
+*.img
+*.img.zip
+*.tar.gz
+build.log

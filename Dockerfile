@@ -1,66 +1,42 @@
-# Use the officially supported Ubuntu 24.04 base image
 FROM ubuntu:24.04
 
-# Disable interactive frontend prompts during package installations
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBCONF_NOWARNINGS=yes
-
-# Set bash as the default shell (fixes "history: not found" in dash)
-SHELL ["/bin/bash", "-c"]
-ENV SHELL=/bin/bash
-
-# Suppress debconf warnings about missing kernel modules
-ENV CONFIG_SITE=/etc/dpkg-cross/cross-config.arm64
-RUN echo 'ac_cv_prog_LSMOD=lsmod' >> /etc/dpkg-cross/cross-config.arm64 2>/dev/null || true
-
-# Install all build toolchain dependencies, cross-compilation layers, and disk partitioning utilities
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    bc \
-    bison \
-    build-essential \
-    curl \
-    dosfstools \
-    flex \
-    git \
-    kmod \
-    libncurses5-dev \
-    libssl-dev \
-    locales \
-    inotify-tools \
-    parted \
-    psmisc \
-    python3-pip \
-    util-linux \
-    qemu-user-static \
-    rsync \
-    schroot \
-    fdisk \
-    sudo \
-    udev \
-    xz-utils \
-    zip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Ensure /bin/sh points to bash (Ubuntu uses dash by default)
-RUN ln -sf /bin/bash /bin/sh
-
-# Generate and configure the missing en_US.UTF-8 locale to prevent layout errors
-RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
+ENV SHELL=/bin/bash
+SHELL ["/bin/bash", "-c"]
 
-# Copy only required build files and directories into the image for full isolation
-# This ensures the container is self-sufficient without mounting host source code
-COPY build.sh /build/
-COPY debian/ /build/debian/
-COPY dev_scripts/ /build/dev_scripts/
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    dosfstools \
+    e2fsprogs \
+    fdisk \
+    git \
+    kmod \
+    locales \
+    parted \
+    psmisc \
+    qemu-user-static \
+    util-linux \
+    xz-utils \
+    zip \
+    zstd \
+    && rm -rf /var/lib/apt/lists/*
 
-# Ensure all shell scripts have execute permissions
-RUN chmod +x *.sh dev_scripts/*.sh debian/*.sh 2>/dev/null || true
+RUN locale-gen en_US.UTF-8
+RUN ln -sf /bin/bash /bin/sh
 
-# Set up the internal work directory
 WORKDIR /build
 
-# Execute the default build script using bash explicitly
-CMD ["/bin/bash", "./build.sh"]
+COPY build.sh /build/
+COPY lib/ /build/lib/
+COPY stages/ /build/stages/
+COPY overlay/ /build/overlay/
+COPY tools/ /build/tools/
+
+RUN chmod +x /build/build.sh /build/lib/*.sh /build/stages/*.sh /build/tools/*.sh
+
+CMD ["/build/build.sh"]

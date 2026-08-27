@@ -1,134 +1,59 @@
 #!/usr/bin/env bash
+# Builds the image inside a throwaway Docker container and collects artifacts.
 
-# Stop the script immediately if any command fails
-set -e
+set -Eeuo pipefail
 
-# Get the build number from Jenkins, default to "local" if run outside Jenkins
 BUILD_NUM="${BUILD_NUMBER:-local}"
-
-# Docker image configuration
 IMAGE_NAME="redpitaya-ubuntu-os-builder"
-TAG="latest"
-FULL_IMAGE_NAME="${IMAGE_NAME}:${TAG}"
+FULL_IMAGE_NAME="${IMAGE_NAME}:latest"
 CONTAINER_NAME="rp-builder-${BUILD_NUM}"
+ARTIFACT_DIR="$(pwd)/artifacts"
 
-# Always remove the builder image (and any leftover container) when this
-# script exits, whether the build succeeded or failed partway through.
-# Without this, a failure in "docker build" or "docker run" (set -e exits
-# immediately) would skip the old end-of-script cleanup and leave the
-# builder image sitting on the host/Jenkins node.
+# Runs on every exit path, so a failed build never leaves the builder behind.
 cleanup() {
-    local exit_code=$?
-    echo "=== Cleanup: removing builder container/image ==="
+    local rc=$?
+    echo "=== cleanup: removing builder container and image"
     docker rm -f "${CONTAINER_NAME}" >/dev/null 2>&1 || true
-    if docker images -q "${FULL_IMAGE_NAME}" > /dev/null 2>&1; then
-        docker rmi -f "${FULL_IMAGE_NAME}" || true
-    fi
-    docker builder prune -f --filter type=frontend || true
-    if [ "$exit_code" -ne 0 ]; then
-        echo "=== Build #${BUILD_NUM} FAILED (exit code ${exit_code}) — builder cleaned up ==="
-    fi
-    exit "$exit_code"
+    docker rmi -f "${FULL_IMAGE_NAME}" >/dev/null 2>&1 || true
+    docker builder prune -f --filter type=frontend >/dev/null 2>&1 || true
+    [ "$rc" -eq 0 ] || echo "=== build #${BUILD_NUM} FAILED (exit ${rc})"
+    exit "$rc"
 }
 trap cleanup EXIT
 
-echo "=== [1/5] Aggressive Docker Cache & Old Image Cleanup ==="
-
-# Stop and remove any leftover containers from previous runs
-if docker ps -a -q -f name="${CONTAINER_NAME}" | grep -q .; then
-    echo "Found existing container ${CONTAINER_NAME}. Saving logs..."
-    docker logs "${CONTAINER_NAME}" > "artifacts/previous_build_${BUILD_NUM}.log" 2>/dev/null || true
-    echo "Stopping and removing old container..."
-    docker stop "${CONTAINER_NAME}" 2>/dev/null || true
-    docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
-    echo "Old container ${CONTAINER_NAME} removed."
-else
-    echo "No existing container named ${CONTAINER_NAME}. Starting fresh."
+echo "=== [1/4] cleaning previous run"
+rm -rf "$ARTIFACT_DIR"
+mkdir -p "$ARTIFACT_DIR"
+if docker ps -a -q -f name="^${CONTAINER_NAME}$" | grep -q .; then
+    docker logs "${CONTAINER_NAME}" > "${ARTIFACT_DIR}/previous_build_${BUILD_NUM}.log" 2>&1 || true
+    docker rm -f "${CONTAINER_NAME}" >/dev/null 2>&1 || true
 fi
+docker rmi -f "${FULL_IMAGE_NAME}" >/dev/null 2>&1 || true
+docker image prune -f >/dev/null 2>&1 || true
 
-# Remove existing builder image to force a completely clean rebuild
-if docker images -q "${FULL_IMAGE_NAME}" > /dev/null 2>&1; then
-    docker rmi -f "${FULL_IMAGE_NAME}" || true
-fi
-
-# Remove any leftover containers from previous runs
-docker rm -f "${CONTAINER_NAME}" 2>/dev/null || true
-
-# Prune all dangling builder cache fragments and unused layers on the host system
-echo "Pruning dangling Docker build cache layers..."
-docker builder prune -f --filter type=frontend || true
-docker image prune -f || true
-
-echo "=== [2/5] Building Docker Image with ALL Source Code Inside ==="
-if [[ ! -f "Dockerfile" ]]; then
-    echo "Error: Dockerfile not found!"
-    exit 1
-fi
-
-# Build with --no-cache for a fresh build, --pull for latest base image updates
-# The Dockerfile COPY instruction bakes all source code into the image
+echo "=== [2/4] building builder image"
+[ -f Dockerfile ] || { echo "Dockerfile not found" >&2; exit 1; }
 docker build --no-cache --pull -t "${FULL_IMAGE_NAME}" .
 
-echo "=== [3/5] Preparing Clean Artifacts Directory ==="
-# Clean local artifacts directory only — no source code will be shared with the container
-rm -rf artifacts
-mkdir -p artifacts
-
-echo "=== [4/5] Starting Fully Isolated Build Inside Container ==="
-echo "Current build number: #${BUILD_NUM}"
-
-# Run the build in an isolated container
-# Only /dev (for loop devices) and artifacts directory are mounted
-# Source code is NOT mounted from host — it's already inside the image via COPY
+echo "=== [3/4] running build #${BUILD_NUM}"
 docker run --privileged --rm \
     --name "${CONTAINER_NAME}" \
     -v /dev:/dev \
-    -v "$(pwd)/artifacts":/artifacts \
+    -v "${ARTIFACT_DIR}":/artifacts \
     -e BUILD_NUM="${BUILD_NUM}" \
-    -e GIT_COMMIT="${GIT_COMMIT}" \
-    "${FULL_IMAGE_NAME}" /bin/bash -c "
-
-        # Verify we are running inside the Docker container, not on the host
-        echo '=== Isolation Verification ==='
-        if [ -f /.dockerenv ]; then
-            echo 'SUCCESS: Running inside the Docker container'
-        else
-            echo 'ERROR: Leak detected! Running on host machine instead of container!'
-            exit 1
-        fi
-
-        echo '=== Starting Red Pitaya Build ==='
-        echo 'Source code location: /build (baked into image, NOT mounted from host)'
-        ls -l /build/build.sh
-
-        # Execute the main Red Pitaya build script from inside the container
-        /build/build.sh
-
-        echo '=== Artifact Filtering: Extracting tar.gz and zip files ==='
-
-        # Find and copy all .tar.gz and .zip artifacts, rename with build number
-        find /build -maxdepth 3 -type f \( -name 'red_pitaya*.tar.gz' -o -name 'red_pitaya*.zip' \) | while read -r file; do
-            filename=\$(basename \"\$file\")
-
-            # Handle double extension for .tar.gz files
-            if [[ \"\$filename\" == *.tar.gz ]]; then
-                base=\"\${filename%.tar.gz}\"
-                ext='tar.gz'
-            else
-                base=\"\${filename%.*}\"
-                ext='zip'
-            fi
-
-            new_name=\"\${base}.\${ext}\"
-            echo \"  Copying: \$filename -> artifacts/\$new_name\"
-            cp \"\$file\" \"/artifacts/\$new_name\"
+    -e GIT_COMMIT="${GIT_COMMIT:-unknown}" \
+    "${FULL_IMAGE_NAME}" /bin/bash -c '
+        set -Eeuo pipefail
+        [ -f /.dockerenv ] || { echo "not running inside a container" >&2; exit 1; }
+        rc=0
+        /build/build.sh || rc=$?
+        for pattern in "*.zip" "*.tar.gz" "*.txt" "*.log"; do
+            find /build/out -maxdepth 1 -type f -name "$pattern" \
+                -exec cp -f {} /artifacts/ \; 2>/dev/null || true
         done
+        exit $rc
+    '
 
-        echo '=== Build completed successfully ==='
-    "
-
-echo "=== [5/5] Build finished, cleanup runs automatically via trap on exit ==="
-
-echo "=== Build #${BUILD_NUM} completed successfully! ==="
-echo "Saved files in artifacts/ directory:"
-ls -lh artifacts/
+echo "=== [4/4] artifacts"
+ls -lh "$ARTIFACT_DIR"
+echo "=== build #${BUILD_NUM} completed"
