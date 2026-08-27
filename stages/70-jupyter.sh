@@ -28,45 +28,49 @@ EOF
 
 log "installing build helpers for python wheels"
 chroot_run <<'EOF'
-pip3 install meson==1.6.1
-pip3 install meson-python==0.17.1
-pip3 install pybind11==2.13.6
-pip3 install cython==3.0.11
-pip3 install contourpy==1.3.1 -U --no-build-isolation
+pip3 install meson==1.12.0
+pip3 install meson-python==0.20.0
+pip3 install pybind11==3.1.0
+# numpy and contourpy build from source on armhf and need Cython >= 3.1.
+pip3 install cython==3.3.0
+pip3 install contourpy==1.3.3 -U --no-build-isolation
 EOF
 
 log "installing jupyter stack"
 chroot_run <<'EOF'
-pip3 install notebook==7.3.2
-pip3 install jupyterlab==4.3.4
-pip3 install ipywidgets==8.1.8
-pip3 install qtconsole==5.6.1
-pip3 install bokeh==3.8.2
-pip3 install jupyterlab_server==2.27.3
-pip3 install jupyterlab-widgets==3.0.15
+# IPython, bokeh and ipywidgets are also pinned by the notebook examples
+# package (its setup.py), keep both sides in sync.
+pip3 install IPython==9.16.1
+pip3 install notebook==7.6.2
+pip3 install jupyterlab==4.6.3
+pip3 install ipywidgets==8.1.9
+pip3 install qtconsole==5.7.2
+pip3 install bokeh==3.9.2
+pip3 install jupyterlab_server==2.28.0
+pip3 install jupyterlab-widgets==3.0.17
 pip3 install jupyterlab-pygments==0.3.0
 pip3 install jupyter_core==5.9.1
-pip3 install jupyter_client==8.8.0
-pip3 install jupyter_bokeh==4.0.5
+pip3 install jupyter_client==8.9.1
+pip3 install jupyter_bokeh==4.1.0
 EOF
 
 log "installing scientific python stack"
 chroot_run <<'EOF'
-pip3 install numpy==2.4.1
-pip3 install scipy==1.17.0
-pip3 install pandas==3.0.0
-pip3 install matplotlib==3.10.0
+pip3 install numpy==2.4.6
+pip3 install scipy==1.17.1
+pip3 install pandas==3.0.5
+pip3 install matplotlib==3.11.1
 EOF
 
 log "installing hardware access modules"
 chroot_run <<'EOF'
 pip3 install python-periphery==2.4.1
-pip3 install smbus2==0.5.0
+pip3 install smbus2==0.6.1
 pip3 install i2cdev==1.2.4
-pip3 install pyvcd==0.4.1
-pip3 install pyudev==0.24.3
+pip3 install pyvcd==0.5.0
+pip3 install pyudev==0.24.4
 pip3 install pyfdt==0.3
-pip3 install nptdms
+pip3 install nptdms==1.11.0
 EOF
 
 log "creating jupyter user"
@@ -84,7 +88,9 @@ git clone --depth 1 https://github.com/jakevdp/WhirlwindTourOfPython.git \
 git -C "$ROOT_DIR/home/jupyter/RedPitaya" rev-parse HEAD > "$OUT_DIR/jupyter_examples_commit"
 
 chroot_run <<'EOF'
-pip3 install -e /home/jupyter/RedPitaya --no-build-isolation
+# --no-deps: the versions above are the single source of truth, the pins in
+# the examples package must not re-resolve the whole stack.
+pip3 install -e /home/jupyter/RedPitaya --no-build-isolation --no-deps
 chown -R jupyter:jupyter /home/jupyter
 systemctl enable jupyter.service
 EOF

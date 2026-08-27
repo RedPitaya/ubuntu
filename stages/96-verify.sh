@@ -149,6 +149,59 @@ then
     fail "python modules are missing"
 fi
 
+if [ "${VERIFY_TOOLCHAIN:-1}" = "1" ]; then
+    # The ecosystem builds its Python bindings with swig -python -c++ -threads -O
+    # and g++ -std=c++20 against the numpy headers of this image.
+    log "checking swig, python headers and numpy headers"
+    if ! chroot_run <<'EOF'
+work="$(mktemp -d)"
+cd "$work"
+cat > check.i <<'IFACE'
+%module swigcheck
+%{
+#define SWIG_FILE_WITH_INIT
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include <numpy/arrayobject.h>
+%}
+%init %{
+import_array();
+%}
+%inline %{
+int sum_int16(PyObject *obj)
+{
+    PyArrayObject *arr = (PyArrayObject *)PyArray_FROM_OTF(obj, NPY_INT16, NPY_ARRAY_IN_ARRAY);
+    if (arr == NULL) {
+        return -1;
+    }
+    npy_intp count = PyArray_SIZE(arr);
+    const npy_int16 *data = (const npy_int16 *)PyArray_DATA(arr);
+    int total = 0;
+    for (npy_intp i = 0; i < count; ++i) {
+        total += data[i];
+    }
+    Py_DECREF(arr);
+    return total;
+}
+%}
+IFACE
+swig -python -c++ -threads -O -o check_wrap.cxx check.i
+g++ -std=c++20 -fPIC -shared check_wrap.cxx -o _swigcheck.so \
+    $(python3-config --includes) \
+    -I"$(python3 -c 'import numpy; print(numpy.get_include())')"
+PYTHONPATH="$work" python3 -c '
+import numpy, swigcheck
+total = swigcheck.sum_int16(numpy.array([1, 2, 3], dtype=numpy.int16))
+assert total == 6, total
+print("swig", "+ numpy", numpy.__version__, "+ python headers: ok")
+'
+cd /
+rm -rf "$work"
+EOF
+    then
+        fail "swig, python headers or numpy headers are unusable"
+    fi
+fi
+
 if [ "$BUILD_KERNEL_MODULES" = "1" ]; then
     log "checking kernel modules"
     release="$(cat "$OUT_DIR/kernel_release" 2>/dev/null || true)"

@@ -86,6 +86,10 @@ Overridable environment variables (see the top of `build.sh` for defaults):
 `VERSION`, `BUILD_NUM`, `GIT_COMMIT`, `TIMEZONE`, `IMAGE_SIZE_MB`,
 `UBUNTU_BASE_VER`, `KERNEL_URL`, `KERNEL_BRANCH`, `KERNEL_DEFCONFIG`,
 `KERNEL_CROSS_COMPILE`, `JUPYTER_URL`, `JUPYTER_BRANCH`,
-`BUILD_KERNEL_MODULES`.
+`BUILD_KERNEL_MODULES`, `VERIFY_TOOLCHAIN`.
+
+`VERIFY_TOOLCHAIN=1` makes `96-verify` build and import a small SWIG module
+against the numpy and Python headers of the image, the same way the ecosystem
+builds its Python bindings. Set it to `0` to skip that compile.
 
 Downloads are cached in `.cache/` between local builds.

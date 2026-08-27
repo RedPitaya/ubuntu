@@ -7,7 +7,12 @@ set -Eeuo pipefail
 log "installing python"
 chroot_run <<'EOF'
 apt-get install -y python3-full python3-pip python3-dev python-is-python3 swig
-pip3 install --upgrade pip setuptools wheel packaging
+pip3 install --ignore-installed \
+    pip==26.2.1 \
+    setuptools==84.0.0 \
+    wheel==0.48.0 \
+    packaging==26.3 \
+    cython==3.3.0
 EOF
 
 log "installing build toolchain"

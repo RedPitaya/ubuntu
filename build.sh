@@ -28,8 +28,9 @@ export KERNEL_DEFCONFIG="${KERNEL_DEFCONFIG:-redpitaya_zynq_defconfig}"
 export KERNEL_KCFLAGS="${KERNEL_KCFLAGS:--O2 -march=armv7-a -mtune=cortex-a9}"
 export KERNEL_CROSS_COMPILE="${KERNEL_CROSS_COMPILE:-arm-linux-gnueabihf-}"
 export JUPYTER_URL="${JUPYTER_URL:-https://github.com/redpitaya/jupyter.git}"
-export JUPYTER_BRANCH="${JUPYTER_BRANCH:-Release-2026.1}"
+export JUPYTER_BRANCH="${JUPYTER_BRANCH:-development}"
 export BUILD_KERNEL_MODULES="${BUILD_KERNEL_MODULES:-1}"
+export VERIFY_TOOLCHAIN="${VERIFY_TOOLCHAIN:-1}"
 
 if [ "$BUILD_NUM" = "local" ]; then
     export IMAGE_NAME="red_pitaya_OS_${VERSION}"
