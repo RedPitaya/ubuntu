@@ -12,6 +12,26 @@ TAG="latest"
 FULL_IMAGE_NAME="${IMAGE_NAME}:${TAG}"
 CONTAINER_NAME="rp-builder-${BUILD_NUM}"
 
+# Always remove the builder image (and any leftover container) when this
+# script exits, whether the build succeeded or failed partway through.
+# Without this, a failure in "docker build" or "docker run" (set -e exits
+# immediately) would skip the old end-of-script cleanup and leave the
+# builder image sitting on the host/Jenkins node.
+cleanup() {
+    local exit_code=$?
+    echo "=== Cleanup: removing builder container/image ==="
+    docker rm -f "${CONTAINER_NAME}" >/dev/null 2>&1 || true
+    if docker images -q "${FULL_IMAGE_NAME}" > /dev/null 2>&1; then
+        docker rmi -f "${FULL_IMAGE_NAME}" || true
+    fi
+    docker builder prune -f --filter type=frontend || true
+    if [ "$exit_code" -ne 0 ]; then
+        echo "=== Build #${BUILD_NUM} FAILED (exit code ${exit_code}) — builder cleaned up ==="
+    fi
+    exit "$exit_code"
+}
+trap cleanup EXIT
+
 echo "=== [1/5] Aggressive Docker Cache & Old Image Cleanup ==="
 
 # Stop and remove any leftover containers from previous runs
@@ -107,13 +127,7 @@ docker run --privileged --rm \
         echo '=== Build completed successfully ==='
     "
 
-echo "=== [5/5] Post-Build Cleanup ==="
-# Remove the builder image to free up disk space on the Jenkins node
-echo "Removing the builder image to keep the environment clean..."
-docker rmi -f "${FULL_IMAGE_NAME}" || true
-
-# Final cleanup of any residual Docker build cache
-docker builder prune -f --filter type=frontend || true
+echo "=== [5/5] Build finished, cleanup runs automatically via trap on exit ==="
 
 echo "=== Build #${BUILD_NUM} completed successfully! ==="
 echo "Saved files in artifacts/ directory:"
