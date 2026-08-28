@@ -18,6 +18,8 @@ IGNORE="$IGNORE"'|update-alternatives: (warning|using)'
 IGNORE="$IGNORE"'|^\s*(Building|Created|Stored|Requirement already satisfied)'
 # parted calls udevadm, which is absent in a chroot and in a minimal container
 IGNORE="$IGNORE"'|udevadm: command not found'
+# the zero fill step in 99-finalize deliberately fills the partition
+IGNORE="$IGNORE"'|cat: write error: No space left on device'
 # printed by every pip call in the image build
 IGNORE="$IGNORE"'|Running pip as the .root. user'
 # the locale is generated inside the rootfs after the first packages install

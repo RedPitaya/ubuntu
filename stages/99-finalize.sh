@@ -20,7 +20,8 @@ rm -f "$ROOT_DIR/usr/bin/qemu-arm-static"
 rm -f "$ROOT_DIR/etc/resolv.conf"
 
 log "zero filling free space"
-cat /dev/zero > "$ROOT_DIR/zero.file" || true
+# Filling the partition until ENOSPC is the point, so its error is expected.
+cat /dev/zero > "$ROOT_DIR/zero.file" 2>/dev/null || true
 sync -f "$ROOT_DIR/zero.file" || true
 rm -f "$ROOT_DIR/zero.file"
 
