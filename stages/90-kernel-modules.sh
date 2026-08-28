@@ -34,6 +34,7 @@ log "building modules for $KERNEL_RELEASE"
 chroot_run <<EOF
 make -C /tmp/kernel $MAKE_ARGS KCFLAGS="$KERNEL_KCFLAGS" -j$(nproc) modules
 make -C /tmp/kernel $MAKE_ARGS INSTALL_MOD_PATH= modules_install
+find /tmp/kernel -name '*.ko' | wc -l > /tmp/kernel_module_count
 depmod -a $KERNEL_RELEASE
 rm -rf /tmp/kernel
 EOF
@@ -42,8 +43,13 @@ MODULE_DIR="$ROOT_DIR/lib/modules/$KERNEL_RELEASE"
 [ -d "$MODULE_DIR" ] || die "modules were not installed into /lib/modules/$KERNEL_RELEASE"
 [ -f "$MODULE_DIR/modules.dep" ] || die "depmod did not create modules.dep"
 
+# The defconfig decides how many modules exist, so the only meaningful check is
+# that every module the kernel built was installed.
+BUILT_COUNT="$(cat "$ROOT_DIR/tmp/kernel_module_count")"
 MODULE_COUNT="$(find "$MODULE_DIR" -type f -name '*.ko*' | wc -l)"
-[ "$MODULE_COUNT" -ge 100 ] || die "only $MODULE_COUNT kernel modules installed"
+[ "$BUILT_COUNT" -gt 0 ] || die "the kernel build produced no modules"
+[ "$MODULE_COUNT" -eq "$BUILT_COUNT" ] \
+    || die "installed $MODULE_COUNT of the $BUILT_COUNT modules the kernel built"
 log "installed $MODULE_COUNT kernel modules"
 
 # These point into the deleted source tree.
@@ -51,3 +57,4 @@ rm -f "$MODULE_DIR/build" "$MODULE_DIR/source"
 
 mv "$ROOT_DIR/tmp/kernel_release" "$OUT_DIR/kernel_release"
 mv "$ROOT_DIR/tmp/kernel_commit" "$OUT_DIR/kernel_commit"
+mv "$ROOT_DIR/tmp/kernel_module_count" "$OUT_DIR/kernel_module_count"

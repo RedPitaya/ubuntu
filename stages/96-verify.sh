@@ -209,8 +209,11 @@ if [ "$BUILD_KERNEL_MODULES" = "1" ]; then
     if [ -n "$release" ]; then
         [ -f "$ROOT_DIR/lib/modules/$release/modules.dep" ] || fail "modules.dep is missing"
         count="$(find "$ROOT_DIR/lib/modules/$release" -type f -name '*.ko*' | wc -l)"
+        expected="$(cat "$OUT_DIR/kernel_module_count" 2>/dev/null || echo 0)"
         log "installed kernel modules: $count"
-        [ "$count" -ge 100 ] || fail "only $count kernel modules installed"
+        [ "$count" -gt 0 ] || fail "no kernel modules installed"
+        [ "$expected" -eq 0 ] || [ "$count" -eq "$expected" ] \
+            || fail "expected $expected kernel modules, found $count"
     fi
 fi
 

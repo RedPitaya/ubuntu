@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     parted \
     psmisc \
     qemu-user-static \
+    udev \
     util-linux \
     xz-utils \
     zip \

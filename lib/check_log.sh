@@ -16,6 +16,14 @@ IGNORE="$IGNORE"'|^(N|Get|Hit|Ign|Selecting|Preparing|Unpacking|Setting up|Proce
 IGNORE="$IGNORE"'|Download is performed unsandboxed'
 IGNORE="$IGNORE"'|update-alternatives: (warning|using)'
 IGNORE="$IGNORE"'|^\s*(Building|Created|Stored|Requirement already satisfied)'
+# parted calls udevadm, which is absent in a chroot and in a minimal container
+IGNORE="$IGNORE"'|udevadm: command not found'
+# printed by every pip call in the image build
+IGNORE="$IGNORE"'|Running pip as the .root. user'
+# the locale is generated inside the rootfs after the first packages install
+IGNORE="$IGNORE"'|setlocale: LC_ALL: cannot change locale'
+IGNORE="$IGNORE"'|perl: warning: (Setting locale failed|Please check that your locale|Falling back to the standard locale)'
+IGNORE="$IGNORE"'|LANGUAGE = |LC_ALL = |LANG = |are supported and installed'
 
 FATAL='^E: '
 FATAL="$FATAL"'|^dpkg: error|dpkg: dependency problems'
