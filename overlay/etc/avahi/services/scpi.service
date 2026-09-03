@@ -2,7 +2,7 @@
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 <service-group>
 <name replace-wildcards="yes">%h SCPI</name>
-<service>
+<service protocol="ipv4">
 <type>_scpi-raw._tcp</type>
 <port>5000</port>
 </service>

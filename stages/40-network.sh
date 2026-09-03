@@ -20,8 +20,10 @@ install_overlay etc/systemd/system/hostapd@.service
 install_overlay etc/systemd/system/hostapd@.path
 install_overlay etc/systemd/system/iptables.service
 install_overlay etc/systemd/system/hostname-mac.service
+install_overlay etc/avahi/avahi-daemon.conf
 install_overlay etc/avahi/services/ssh.service
 install_overlay etc/avahi/services/bazaar.service
+install_overlay etc/avahi/services/scpi.service
 
 # ExecStop of iptables.service expects the script in this location.
 install_overlay etc/systemd/system/iptables-flush usr/lib/systemd/scripts/iptables-flush 0755
@@ -75,7 +77,14 @@ write_rootfs_file etc/mdns.allow <<'EOF'
 .local
 EOF
 
-patch_rootfs_file 's/mdns4_minimal/mdns/' etc/nsswitch.conf '^hosts:.*\bmdns\b'
+# Resolve .local over IPv4 only. libnss-mdns's postinst puts mdns4_minimal on
+# the hosts line - the IPv4-only, .local-only module. This used to rewrite it
+# to plain "mdns", which resolves BOTH address families, so a .local lookup
+# could come back as an fe80:: link-local address. That is the resolver half of
+# use-ipv6=no in avahi-daemon.conf; either alone leaves a path back to an
+# answer no other host can use.
+patch_rootfs_file 's/\bmdns[46]?(_minimal)?\b/mdns4_minimal/g' \
+    etc/nsswitch.conf '^hosts:.*\bmdns4_minimal\b'
 patch_rootfs_file 's|^(ExecStart=.*systemd-networkd-wait-online)$|\1 --any|' \
     lib/systemd/system/systemd-networkd-wait-online.service \
     'systemd-networkd-wait-online .*--any'

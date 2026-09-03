@@ -2,7 +2,7 @@
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 <service-group>
 <name replace-wildcards="yes">%h SSH</name>
-<service>
+<service protocol="ipv4">
 <type>_ssh._tcp</type>
 <port>22</port>
 </service>
